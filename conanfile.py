@@ -1,36 +1,32 @@
-"""Conan.io recipe for CppRestSDK library
-"""
-from conans import ConanFile, CMake
+from conans import ConanFile, CMake, tools
 from os import path
 
 
 class CppRestSDKConan(ConanFile):
-    """Checkout CppRestSDK, build and create package
-    """
     name = "cpprestsdk"
     version = "2.9.1"
     generators = "cmake"
     settings = "os", "arch", "compiler", "build_type"
     options = {"shared": [True, False]}
+    default_options = "shared=True"
     exports_sources = "CMakeLists.txt"
-    url = "https://github.com/Microsoft/cpprestsdk"
+    url = "https://github.com/bincrafters/conan-cpprestsdks"
     author = "Uilian Ries <uilianries@gmail.com>"
     description = "A project for cloud-based client-server communication in native code using a modern asynchronous C++ API design"
     license = "https://github.com/Microsoft/cpprestsdk/blob/master/license.txt"
-    requires = "Boost/1.62.0@lasote/stable", "OpenSSL/1.0.2l@conan/stable"
-    cpprestsdk_dir = "%s-%s" % (name, version)
-    default_options = "shared=True"
-
+    requires = "OpenSSL/1.0.2l@conan/stable", \
+            "Boost.Random/1.64.0@bincrafters/stable", \
+            "Boost.System/1.64.0@bincrafters/stable", \
+            "Boost.Thread/1.64.0@bincrafters/stable", \
+            "Boost.Filesystem/1.64.0@bincrafters/stable", \
+            "Boost.Chrono/1.64.0@bincrafters/stable", \
+            "Boost.Atomic/1.64.0@bincrafters/stable", \
+            "Boost.Date_Time/1.64.0@bincrafters/stable", \
+            "Boost.Regex/1.64.0@bincrafters/stable"
+  
     def source(self):
-        self.run("git clone --depth=50 --branch=v%s %s.git %s" % (self.version, self.url, self.cpprestsdk_dir))
-
-    def config_options(self):
-        if self.settings.os == "Linux":
-            self.options["Boost"].fPIC = True
-
-    def configure(self):
-        if self.settings.os == "Macos" or self.settings.os == "Windows":
-            self.options.shared = True
+        source_url = "https://github.com/Microsoft/cpprestsdk"
+        tools.get("{0}/{1}/archive/v{2}.tar.gz".format(source_url, self.name, self.version))
 
     def build(self):
         cmake = CMake(self)
