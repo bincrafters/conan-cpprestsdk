@@ -9,7 +9,7 @@ CONAN_BASIC_SETUP()
 if (WIN32)
     set(BOOST_ROOT ${CONAN_BOOST_ROOT})
     set(BOOST_LIBRARYDIR ${CONAN_LIB_DIRS_BOOST})
-    find_package(Boost 1.62 COMPONENTS system date_time regex REQUIRED)
+    find_package(Boost 1.64 COMPONENTS system date_time regex REQUIRED)
 
     set(ZLIB_ROOT ${CONAN_ZLIB_ROOT})
     set(ZLIB_LIBRARYDIR ${CONAN_LIB_DIRS_ZLIB})

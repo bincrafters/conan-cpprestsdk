@@ -15,6 +15,8 @@ class CppRestSDKConan(ConanFile):
     description = "A project for cloud-based client-server communication in native code using a modern asynchronous C++ API design"
     license = "https://github.com/Microsoft/cpprestsdk/blob/master/license.txt"
     requires = "OpenSSL/1.0.2l@conan/stable", \
+            "zlib/1.2.8@conan/stable", \
+            "websocketpp/0.7.0@bincrafters/stable", \
             "Boost.Random/1.64.0@bincrafters/stable", \
             "Boost.System/1.64.0@bincrafters/stable", \
             "Boost.Thread/1.64.0@bincrafters/stable", \
