@@ -16,15 +16,15 @@ class CppRestSDKConan(ConanFile):
     license = "https://github.com/Microsoft/cpprestsdk/blob/master/license.txt"
     requires = "OpenSSL/1.0.2l@conan/stable", \
             "zlib/1.2.8@conan/stable", \
-            "websocketpp/0.7.0@bincrafters/stable", \
-            "Boost.Random/1.64.0@bincrafters/stable", \
-            "Boost.System/1.64.0@bincrafters/stable", \
-            "Boost.Thread/1.64.0@bincrafters/stable", \
-            "Boost.Filesystem/1.64.0@bincrafters/stable", \
-            "Boost.Chrono/1.64.0@bincrafters/stable", \
-            "Boost.Atomic/1.64.0@bincrafters/stable", \
-            "Boost.Date_Time/1.64.0@bincrafters/stable", \
-            "Boost.Regex/1.64.0@bincrafters/stable"
+            "websocketpp/0.7.0@bincrafters/testing", \
+            "Boost.Random/1.64.0@bincrafters/testing", \
+            "Boost.System/1.64.0@bincrafters/testing", \
+            "Boost.Thread/1.64.0@bincrafters/testing", \
+            "Boost.Filesystem/1.64.0@bincrafters/testing", \
+            "Boost.Chrono/1.64.0@bincrafters/testing", \
+            "Boost.Atomic/1.64.0@bincrafters/testing", \
+            "Boost.Date_Time/1.64.0@bincrafters/testing", \
+            "Boost.Regex/1.64.0@bincrafters/testing"
   
     def source(self):
         source_url = "https://github.com/Microsoft/cpprestsdk"
