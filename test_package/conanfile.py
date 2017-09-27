@@ -17,4 +17,5 @@ class TestPackage(ConanFile):
         self.copy(pattern="*.dylib", dst="bin", src="lib")
 
     def test(self):
-        self.run(os.path.join("bin","test_package"))
+        os.chdir("bin")
+        self.run("./test_package")
