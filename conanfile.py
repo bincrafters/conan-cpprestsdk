@@ -41,7 +41,7 @@ class CppRestSDKConan(ConanFile):
 
     def package(self):
         root = "%s-%s" % (self.name, self.version)
-        self.copy("license.txt",  dst=".", src=self.cpprestsdk_dir)
+        self.copy("license.txt",  dst=".", src=root)
         self.copy(pattern="*", dst="include", src=path.join(root, "Release", "include"))
         self.copy(pattern="*.dll", dst="bin", src="bin", keep_path=False)
         self.copy(pattern="*.lib", dst="lib", src="lib", keep_path=False)
