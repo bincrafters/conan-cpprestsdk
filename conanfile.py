@@ -14,17 +14,19 @@ class CppRestSDKConan(ConanFile):
     author = "Uilian Ries <uilianries@gmail.com>"
     description = "A project for cloud-based client-server communication in native code using a modern asynchronous C++ API design"
     license = "https://github.com/Microsoft/cpprestsdk/blob/master/license.txt"
-    requires = "OpenSSL/1.0.2l@conan/stable", \
-            "zlib/1.2.8@conan/stable", \
-            "websocketpp/0.7.0@bincrafters/testing", \
-            "Boost.Random/1.64.0@bincrafters/testing", \
-            "Boost.System/1.64.0@bincrafters/testing", \
-            "Boost.Thread/1.64.0@bincrafters/testing", \
-            "Boost.Filesystem/1.64.0@bincrafters/testing", \
-            "Boost.Chrono/1.64.0@bincrafters/testing", \
-            "Boost.Atomic/1.64.0@bincrafters/testing", \
-            "Boost.Date_Time/1.64.0@bincrafters/testing", \
-            "Boost.Regex/1.64.0@bincrafters/testing"
+
+    def requirements(self):
+        self.requires.add("OpenSSL/1.0.2l@conan/stable")
+        self.requires.add("zlib/1.2.8@conan/stable")
+        self.requires.add("websocketpp/0.7.0@%s/%s" % (self.user, self.channel))
+        self.requires.add("Boost.Random/1.64.0@%s/%s" % (self.user, self.channel))
+        self.requires.add("Boost.System/1.64.0@%s/%s" % (self.user, self.channel))
+        self.requires.add("Boost.Thread/1.64.0@%s/%s" % (self.user, self.channel))
+        self.requires.add("Boost.Filesystem/1.64.0@%s/%s" % (self.user, self.channel))
+        self.requires.add("Boost.Chrono/1.64.0@%s/%s" % (self.user, self.channel))
+        self.requires.add("Boost.Atomic/1.64.0@%s/%s" % (self.user, self.channel))
+        self.requires.add("Boost.Date_Time/1.64.0@%s/%s" % (self.user, self.channel))
+        self.requires.add("Boost.Regex/1.64.0@%s/%s" % (self.user, self.channel))
 
     def source(self):
         source_url = "https://github.com/Microsoft/cpprestsdk"
