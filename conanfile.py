@@ -25,7 +25,7 @@ class CppRestSDKConan(ConanFile):
             "Boost.Atomic/1.64.0@bincrafters/testing", \
             "Boost.Date_Time/1.64.0@bincrafters/testing", \
             "Boost.Regex/1.64.0@bincrafters/testing"
-  
+
     def source(self):
         source_url = "https://github.com/Microsoft/cpprestsdk"
         tools.get("{0}/archive/v{1}.tar.gz".format(source_url, self.version))
@@ -38,16 +38,19 @@ class CppRestSDKConan(ConanFile):
         cmake.build()
 
     def package(self):
+        root = "%s-%s" % (self.name, self.version)
         self.copy("license.txt",  dst=".", src=self.cpprestsdk_dir)
-        self.copy(pattern="*", dst="include", src=path.join("cpprestsdk-2.9.1", "Release", "include"))
+        self.copy(pattern="*", dst="include", src=path.join(root, "Release", "include"))
         self.copy(pattern="*.dll", dst="bin", src="bin", keep_path=False)
         self.copy(pattern="*.lib", dst="lib", src="lib", keep_path=False)
         self.copy(pattern="*.a", dst="lib", src="lib", keep_path=False)
-        self.copy(pattern="*.so*", dst="lib", src=path.join("cpprestsdk-2.9.1", "Release", "Binaries"), keep_path=False)
-        self.copy(pattern="*.dylib", dst="lib", src=path.join("cpprestsdk-2.9.1", "Release", "Binaries"), keep_path=False)
+        self.copy(pattern="*.so*", dst="lib", src=path.join(root, "Release", "Binaries"), keep_path=False)
+        self.copy(pattern="*.dylib", dst="lib", src=path.join(root, "Release", "Binaries"), keep_path=False)
 
     def package_info(self):
-        lib_name = "cpprest_2_9" if self.settings.compiler == "Visual Studio" else "cpprest"
+        version_tokens = version.split(".")
+        versioned_name = "cpprest_%s_%s" % (version_tokens[0], version_tokens[1])
+        lib_name = versioned_name if self.settings.compiler == "Visual Studio" else "cpprest"
         self.cpp_info.libs.append(lib_name)
         if self.settings.os == "Linux":
             self.cpp_info.libs.append("pthread")
