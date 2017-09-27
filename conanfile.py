@@ -28,7 +28,7 @@ class CppRestSDKConan(ConanFile):
   
     def source(self):
         source_url = "https://github.com/Microsoft/cpprestsdk"
-        tools.get("{0}/{1}/archive/v{2}.tar.gz".format(source_url, self.name, self.version))
+        tools.get("{0}/archive/v{1}.tar.gz".format(source_url, self.version))
 
     def build(self):
         cmake = CMake(self)
