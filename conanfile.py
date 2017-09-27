@@ -68,6 +68,10 @@ class CppRestSDKConan(ConanFile):
         cmake.definitions["BUILD_SAMPLES"] = False
         cmake.definitions["CMAKE_MODULE_PATH"] = getcwd()
         cmake.definitions["CMAKE_VERBOSE_MAKEFILE"] = True
+        if self.settings.os == "iOS":
+            cmake.definitions["IOS"] = True
+        elif self.settings.os == "Android":
+            cmake.definitions["ANDROID"] = True
         cmake.configure()
         cmake.build()
 
