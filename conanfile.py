@@ -50,7 +50,7 @@ class CppRestSDKConan(ConanFile):
         self.copy(pattern="*.dylib", dst="lib", src=path.join(root, "Release", "Binaries"), keep_path=False)
 
     def package_info(self):
-        version_tokens = version.split(".")
+        version_tokens = self.version.split(".")
         versioned_name = "cpprest_%s_%s" % (version_tokens[0], version_tokens[1])
         lib_name = versioned_name if self.settings.compiler == "Visual Studio" else "cpprest"
         self.cpp_info.libs.append(lib_name)
