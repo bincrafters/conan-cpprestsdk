@@ -65,7 +65,7 @@ class CppRestSDKConan(ConanFile):
 
                         boost_config.write('set(Boost_%s_LIBRARY "%s")\n' % (library_name, library))
 
-        tools.replace_in_file(os.path.join(self.root, 'Release', 'CMakeLists.txt'), '-Wconversion', '-Wno-conversion')
+        tools.replace_in_file(path.join(self.root, 'Release', 'CMakeLists.txt'), '-Wconversion', '-Wno-conversion')
         cmake = CMake(self)
         cmake.definitions["BUILD_TESTS"] = False
         cmake.definitions["BUILD_SAMPLES"] = False
