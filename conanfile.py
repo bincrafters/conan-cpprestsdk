@@ -95,3 +95,5 @@ class CppRestSDKConan(ConanFile):
         self.cpp_info.libs.append(lib_name)
         if self.settings.os == "Linux":
             self.cpp_info.libs.append("pthread")
+        if not self.options.shared:
+            self.cpp_info.defines.append("_NO_ASYNCRTIMP")
