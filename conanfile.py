@@ -59,7 +59,9 @@ class CppRestSDKConan(ConanFile):
             for (pkg_name, cpp_info) in self.deps_cpp_info.dependencies:
                 if fnmatch.fnmatch(pkg_name, "Boost.*") and cpp_info.libs:
                     for library in cpp_info.libs:
-                        library_name = library.split('_')[1].upper()
+                        library_name = library.split('-')[0]
+                        library_name = '_'.join(library_name.split('_')[1:]).upper()
+
                         boost_config.write('set(Boost_%s_LIBRARY "%s")\n' % (library_name, library))
 
         cmake = CMake(self)
