@@ -45,8 +45,8 @@ class CppRestSDKConan(ConanFile):
                     boost_library_dirs.extend([path.join(cpp_info.rootpath, d) for d in cpp_info.libdirs])
                     boost_libraries.extend(cpp_info.libs)
 
-        boost_include_dirs = ";".join(boost_include_dirs)
-        boost_library_dirs = ";".join(boost_library_dirs)
+        boost_include_dirs = ";".join(boost_include_dirs).replace('\\', '/')
+        boost_library_dirs = ";".join(boost_library_dirs).replace('\\', '/')
         boost_libraries = ";".join(boost_libraries)
 
         # we have to use our own FindBoost.cmake, as CMake's one does not support modular boost
@@ -66,7 +66,7 @@ class CppRestSDKConan(ConanFile):
         cmake.definitions["BUILD_TESTS"] = False
         cmake.definitions["BUILD_SAMPLES"] = False
         cmake.definitions["BUILD_SAMPLES"] = False
-        cmake.definitions["CMAKE_MODULE_PATH"] = getcwd()
+        cmake.definitions["CMAKE_MODULE_PATH"] = getcwd().replace('\\', '/')
         cmake.definitions["CMAKE_VERBOSE_MAKEFILE"] = True
         if self.settings.os == "iOS":
             cmake.definitions["IOS"] = True
