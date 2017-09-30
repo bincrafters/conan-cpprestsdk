@@ -1,4 +1,4 @@
-from conans import ConanFile, CMake
+from conans import ConanFile, CMake, RunEnvironment, tools
 import os
 
 
@@ -17,5 +17,10 @@ class TestPackage(ConanFile):
         self.copy(pattern="*.dylib", dst="bin", src="lib")
 
     def test(self):
-        os.chdir("bin")
-        self.run("./test_package")
+        with tools.chdir("bin"):
+            env_build = RunEnvironment(self)
+            with tools.environment_append(env_build.vars):
+                if self.settings.os == "Windows":
+                    self.run("test_package")
+                else:
+                    self.run("./test_package")
