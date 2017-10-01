@@ -71,7 +71,6 @@ class CppRestSDKConan(ConanFile):
         cmake.definitions["BUILD_SAMPLES"] = False
         cmake.definitions["BUILD_SAMPLES"] = False
         cmake.definitions["CMAKE_MODULE_PATH"] = getcwd().replace('\\', '/')
-        cmake.definitions["CMAKE_VERBOSE_MAKEFILE"] = True
         cmake.definitions["WERROR"] = False
         if self.settings.os != "Windows":
             cmake.definitions["CMAKE_CXX_FLAGS"] = ""
