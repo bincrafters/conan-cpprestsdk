@@ -1,7 +1,16 @@
 from __future__ import print_function
 from conans import ConanFile, CMake, tools
-from os import path, getcwd
+from os import path, getcwd, environ
 import fnmatch
+import subprocess
+
+
+def call(command):
+    return subprocess.check_output(command, shell=False).strip()
+
+
+def find_sysroot(sdk):
+    return call(["xcrun", "--show-sdk-path", "-sdk", sdk])
 
 
 class CppRestSDKConan(ConanFile):
@@ -66,6 +75,25 @@ class CppRestSDKConan(ConanFile):
                         boost_config.write('set(Boost_%s_LIBRARY "%s")\n' % (library_name, library))
 
         tools.replace_in_file(path.join(self.root, 'Release', 'CMakeLists.txt'), '-Wconversion', '-Wno-conversion')
+
+        if self.settings.os == "iOS":
+            with open('toolchain.cmake', 'w') as toolchain_cmake:
+                if self.settings.arch == "armv8":
+                    arch = "arm64"
+                    sdk = "iphoneos"
+                elif self.settings.arch == "x86_64":
+                    arch = "x86_64"
+                    sdk = "iphonesimulator"
+                sysroot = find_sysroot(sdk)
+                toolchain_cmake.write('set(CMAKE_C_COMPILER /usr/bin/clang CACHE STRING "" FORCE)\n')
+                toolchain_cmake.write('set(CMAKE_CXX_COMPILER /usr/bin/clang++ CACHE STRING "" FORCE)\n')
+                toolchain_cmake.write('set(CMAKE_C_COMPILER_WORKS YES)\n')
+                toolchain_cmake.write('set(CMAKE_CXX_COMPILER_WORKS YES)\n')
+                toolchain_cmake.write('set(CMAKE_XCODE_EFFECTIVE_PLATFORMS "-%s" CACHE STRING "" FORCE)\n' % sdk)
+                toolchain_cmake.write('set(CMAKE_OSX_ARCHITECTURES "%s" CACHE STRING "" FORCE)\n' % arch)
+                toolchain_cmake.write('set(CMAKE_OSX_SYSROOT "%s" CACHE STRING "" FORCE)\n' % sysroot)
+            environ['CONAN_CMAKE_TOOLCHAIN_FILE'] = path.join(getcwd(), 'toolchain.cmake')
+
         cmake = CMake(self)
         cmake.definitions["BUILD_TESTS"] = False
         cmake.definitions["BUILD_SAMPLES"] = False
