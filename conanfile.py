@@ -72,8 +72,6 @@ class CppRestSDKConan(ConanFile):
         cmake.definitions["BUILD_SAMPLES"] = False
         cmake.definitions["CMAKE_MODULE_PATH"] = getcwd().replace('\\', '/')
         cmake.definitions["WERROR"] = False
-        if self.settings.os != "Windows":
-            cmake.definitions["CMAKE_CXX_FLAGS"] = ""
         if self.settings.os == "iOS":
             cmake.definitions["IOS"] = True
         elif self.settings.os == "Android":
