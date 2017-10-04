@@ -21,20 +21,20 @@ If your are in Windows you should run it from a VisualStudio console in order to
 
 ## Upload packages to server
 
-    $ conan upload cpprestsdk/2.9.1@uilianries/stable --all
+    $ conan upload cpprestsdk/2.9.1@bincrafters/testing --all
 
 ## Reuse the packages
 
 ### Basic setup
 
-    $ conan install cpprestsdk/2.9.1@uilianries/stable
+    $ conan install cpprestsdk/2.9.1@bincrafters/testing
 
 ### Project setup
 
 If you handle multiple dependencies in your project is better to add a *conanfile.txt*
 
     [requires]
-    cpprestsdk/2.9.1@uilianries/stable
+    cpprestsdk/2.9.1@bincrafters/testing
 
     [options]
     cpprestsdk:shared=True # False
