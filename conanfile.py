@@ -21,7 +21,7 @@ class CppRestSDKConan(ConanFile):
     options = {"shared": [True, False]}
     default_options = "shared=True"
     exports_sources = "CMakeLists.txt"
-    url = "https://github.com/bincrafters/conan-cpprestsdks"
+    url = "https://github.com/bincrafters/conan-cpprestsdk"
     author = "Uilian Ries <uilianries@gmail.com>"
     description = "A project for cloud-based client-server communication in native code using a modern asynchronous C++ API design"
     license = "https://github.com/Microsoft/cpprestsdk/blob/master/license.txt"
