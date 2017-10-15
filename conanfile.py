@@ -63,7 +63,7 @@ class CppRestSDKConan(ConanFile):
         with open("FindBoost.cmake", "w") as boost_config:
             boost_config.write('message(STATUS "using boost config")\n')
             boost_config.write('set(Boost_INCLUDE_DIRS "%s")\n' % boost_include_dirs)
-            boost_config.write('set(Boost_LIBRARY_DIRR "%s")\n' % boost_library_dirs)
+            boost_config.write('set(Boost_LIBRARY_DIRS "%s")\n' % boost_library_dirs)
             boost_config.write('set(Boost_LIBRARIES "%s")\n' % boost_libraries)
             boost_config.write('set(Boost_FOUND ON)\n')
             for (pkg_name, cpp_info) in self.deps_cpp_info.dependencies:
