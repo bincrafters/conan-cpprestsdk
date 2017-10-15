@@ -51,4 +51,4 @@ The following command both runs all the steps of the conan file, and publishes t
     $ conan upload cpprestsdk/2.9.1@bincrafters/stable --all -r bincrafters
 	
 ### License
-[MIT](LICENSE)
+[MIT](https://github.com/Microsoft/cpprestsdk/blob/master/license.txt)
