@@ -29,7 +29,7 @@ class CppRestSDKConan(ConanFile):
 
     def requirements(self):
         self.requires.add("OpenSSL/1.0.2l@conan/stable")
-        self.requires.add("zlib/1.2.8@conan/stable")
+        self.requires.add("zlib/1.2.11@conan/stable")
         self.requires.add("websocketpp/0.7.0@%s/%s" % (self.user, self.channel))
         self.requires.add("Boost.Random/1.64.0@%s/%s" % (self.user, self.channel))
         self.requires.add("Boost.System/1.64.0@%s/%s" % (self.user, self.channel))
