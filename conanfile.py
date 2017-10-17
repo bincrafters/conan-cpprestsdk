@@ -31,14 +31,14 @@ class CppRestSDKConan(ConanFile):
         self.requires.add("OpenSSL/1.0.2l@conan/stable")
         self.requires.add("zlib/1.2.11@conan/stable")
         self.requires.add("websocketpp/0.7.0@%s/%s" % (self.user, self.channel))
-        self.requires.add("Boost.Random/1.64.0@%s/%s" % (self.user, self.channel))
-        self.requires.add("Boost.System/1.64.0@%s/%s" % (self.user, self.channel))
-        self.requires.add("Boost.Thread/1.64.0@%s/%s" % (self.user, self.channel))
-        self.requires.add("Boost.Filesystem/1.64.0@%s/%s" % (self.user, self.channel))
-        self.requires.add("Boost.Chrono/1.64.0@%s/%s" % (self.user, self.channel))
-        self.requires.add("Boost.Atomic/1.64.0@%s/%s" % (self.user, self.channel))
-        self.requires.add("Boost.Date_Time/1.64.0@%s/%s" % (self.user, self.channel))
-        self.requires.add("Boost.Regex/1.64.0@%s/%s" % (self.user, self.channel))
+        self.requires.add("Boost.Random/[>1.64.0]@%s/%s" % (self.user, self.channel))
+        self.requires.add("Boost.System/[>1.64.0]@%s/%s" % (self.user, self.channel))
+        self.requires.add("Boost.Thread/[>1.64.0]@%s/%s" % (self.user, self.channel))
+        self.requires.add("Boost.Filesystem/[>1.64.0]@%s/%s" % (self.user, self.channel))
+        self.requires.add("Boost.Chrono/[>1.64.0]@%s/%s" % (self.user, self.channel))
+        self.requires.add("Boost.Atomic/[>1.64.0]@%s/%s" % (self.user, self.channel))
+        self.requires.add("Boost.Date_Time/[>1.64.0]@%s/%s" % (self.user, self.channel))
+        self.requires.add("Boost.Regex/[>1.64.0]@%s/%s" % (self.user, self.channel))
 
     def source(self):
         source_url = "https://github.com/Microsoft/cpprestsdk"
