@@ -33,14 +33,14 @@ class CppRestSDKConan(ConanFile):
             self.requires.add("zlib/1.2.11@conan/stable")
         if not self.options.exclude_websockets:
             self.requires.add("websocketpp/0.7.0@%s/%s" % (self.user, self.channel))
-            self.requires.add("Boost.Random/1.65.1@%s/%s" % (self.user, self.channel))
-            self.requires.add("Boost.System/1.65.1@%s/%s" % (self.user, self.channel))
-            self.requires.add("Boost.Thread/1.65.1@%s/%s" % (self.user, self.channel))
-            self.requires.add("Boost.Filesystem/1.65.1@%s/%s" % (self.user, self.channel))
-            self.requires.add("Boost.Chrono/1.65.1@%s/%s" % (self.user, self.channel))
-            self.requires.add("Boost.Atomic/1.65.1@%s/%s" % (self.user, self.channel))
-            self.requires.add("Boost.Date_Time/1.65.1@%s/%s" % (self.user, self.channel))
-            self.requires.add("Boost.Regex/1.65.1@%s/%s" % (self.user, self.channel))
+        self.requires.add("Boost.Random/1.65.1@%s/%s" % (self.user, self.channel))
+        self.requires.add("Boost.System/1.65.1@%s/%s" % (self.user, self.channel))
+        self.requires.add("Boost.Thread/1.65.1@%s/%s" % (self.user, self.channel))
+        self.requires.add("Boost.Filesystem/1.65.1@%s/%s" % (self.user, self.channel))
+        self.requires.add("Boost.Chrono/1.65.1@%s/%s" % (self.user, self.channel))
+        self.requires.add("Boost.Atomic/1.65.1@%s/%s" % (self.user, self.channel))
+        self.requires.add("Boost.Date_Time/1.65.1@%s/%s" % (self.user, self.channel))
+        self.requires.add("Boost.Regex/1.65.1@%s/%s" % (self.user, self.channel))
 
     def source(self):
         source_url = "https://github.com/Microsoft/cpprestsdk"
@@ -77,8 +77,7 @@ class CppRestSDKConan(ConanFile):
                         boost_config.write('set(Boost_%s_LIBRARY "%s")\n' % (library_name, library))
 
     def build(self):
-        if not self.options.exclude_websockets:
-            self.generate_find_boost()
+        self.generate_find_boost()
 
         if self.settings.os == "iOS":
             with open('toolchain.cmake', 'w') as toolchain_cmake:
