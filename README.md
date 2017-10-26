@@ -1,5 +1,5 @@
-[ ![Download](https://api.bintray.com/packages/bincrafters/public-conan/cpprestsdk%3Abincrafters/images/download.svg?version=2.9.1%3Astable) ](https://bintray.com/bincrafters/public-conan/cpprestsdk%3Abincrafters/2.9.1%3Astable/link)
-[![Build Status](https://travis-ci.org/bincrafters/conan-cpprestsdk.svg?branch=stable%2F2.9.1)](https://travis-ci.org/bincrafters/conan-cpprestsdk)
+[ ![Download](https://api.bintray.com/packages/bincrafters/public-conan/cpprestsdk%3Abincrafters/images/download.svg?version=2.10.0%3Astable) ](https://bintray.com/bincrafters/public-conan/cpprestsdk%3Abincrafters/2.10.0%3Astable/link)
+[![Build Status](https://travis-ci.org/bincrafters/conan-cpprestsdk.svg?branch=testing%2F2.10.0)](https://travis-ci.org/bincrafters/conan-cpprestsdk)
 [![Build status](https://ci.appveyor.com/api/projects/status/a5snyovachh6e8nh?svg=true)](https://ci.appveyor.com/project/BinCrafters/conan-cpprestsdk)
 
 The **C++ REST SDK** is a Microsoft project for cloud-based client-server communication in native code using a modern asynchronous C++ API design. This project aims to help C++ developers connect to and interact with services.
@@ -14,14 +14,14 @@ The packages generated with this **conanfile** can be found in [Bintray](https:/
 
 ### Basic setup
 
-    $ conan install cpprestsdk/2.9.1@bincrafters/stable
+    $ conan install cpprestsdk/2.10.0@bincrafters/stable
 	
 ### Project setup
 
 If you handle multiple dependencies in your project is better to add a *conanfile.txt*
 
     [requires]
-    cpprestsdk/2.9.1@bincrafters/stable
+    cpprestsdk/2.10.0@bincrafters/stable
 
     [generators]
     txt
@@ -48,7 +48,7 @@ The following command both runs all the steps of the conan file, and publishes t
 
 ## Upload
 
-    $ conan upload cpprestsdk/2.9.1@bincrafters/stable --all -r bincrafters
+    $ conan upload cpprestsdk/2.10.0@bincrafters/stable --all -r bincrafters
 	
 ### License
 [MIT](https://github.com/Microsoft/cpprestsdk/blob/master/license.txt)
