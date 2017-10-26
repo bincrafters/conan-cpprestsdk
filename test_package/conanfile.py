@@ -1,9 +1,9 @@
-from conans import ConanFile, CMake, RunEnvironment, tools
+from conans import ConanFile, CMake, tools, RunEnvironment
 import os
 
 
-class TestPackage(ConanFile):
-    settings = "os", "compiler", "arch", "build_type"
+class TestPackageConan(ConanFile):
+    settings = "os", "compiler", "build_type", "arch"
     generators = "cmake"
 
     def build(self):
@@ -11,16 +11,9 @@ class TestPackage(ConanFile):
         cmake.configure()
         cmake.build()
 
-    def imports(self):
-        self.copy(pattern="*.so*", dst="bin", src="lib")
-        self.copy(pattern="*.dll", dst="bin", src="bin")
-        self.copy(pattern="*.dylib", dst="bin", src="lib")
-
     def test(self):
-        with tools.chdir("bin"):
-            env_build = RunEnvironment(self)
-            with tools.environment_append(env_build.vars):
-                if self.settings.os == "Windows":
-                    self.run("test_package")
-                else:
-                    self.run("./test_package")
+        with tools.environment_append(RunEnvironment(self).vars):
+            if self.settings.os == "Windows":
+                self.run(os.path.join("bin","test_package"))
+            else:
+                self.run("DYLD_LIBRARY_PATH=%s %s"%(os.environ['DYLD_LIBRARY_PATH'],os.path.join("bin","test_package")))
