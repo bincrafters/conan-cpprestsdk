@@ -1,6 +1,6 @@
 [ ![Download](https://api.bintray.com/packages/bincrafters/public-conan/cpprestsdk%3Abincrafters/images/download.svg?version=2.10.0%3Astable) ](https://bintray.com/bincrafters/public-conan/cpprestsdk%3Abincrafters/2.10.0%3Astable/link)
 [![Build Status](https://travis-ci.org/bincrafters/conan-cpprestsdk.svg?branch=testing%2F2.10.0)](https://travis-ci.org/bincrafters/conan-cpprestsdk)
-[![Build status](https://ci.appveyor.com/api/projects/status/a5snyovachh6e8nh?svg=true)](https://ci.appveyor.com/project/BinCrafters/conan-cpprestsdk)
+[![Build status](https://ci.appveyor.com/api/projects/status/a5snyovachh6e8nh/branch/testing/2.10.0?svg=true)](https://ci.appveyor.com/project/BinCrafters/conan-cpprestsdk/branch/testing/2.10.0)
 
 The **C++ REST SDK** is a Microsoft project for cloud-based client-server communication in native code using a modern asynchronous C++ API design. This project aims to help C++ developers connect to and interact with services.
 
