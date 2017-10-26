@@ -18,4 +18,4 @@ if (WIN32)
     endif()
 endif(WIN32)
 
-add_subdirectory("cpprestsdk-2.9.1/Release")
+add_subdirectory("cpprestsdk-2.10.0/Release")
