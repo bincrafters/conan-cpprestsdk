@@ -7,11 +7,15 @@ CONAN_BASIC_SETUP()
 
 # Find Boost and zlib 
 if (WIN32)
-    find_package(Boost 1.64 COMPONENTS system date_time regex REQUIRED)
+    if (NOT CPPREST_EXCLUDE_WEBSOCKETS)
+      find_package(Boost 1.64 COMPONENTS system date_time regex REQUIRED)
+    endif()
 
-    set(ZLIB_ROOT ${CONAN_ZLIB_ROOT})
-    set(ZLIB_LIBRARYDIR ${CONAN_LIB_DIRS_ZLIB})
-    find_package(ZLIB REQUIRED)
+    if (NOT CPPREST_EXCLUDE_COMPRESSION)
+      set(ZLIB_ROOT ${CONAN_ZLIB_ROOT})
+      set(ZLIB_LIBRARYDIR ${CONAN_LIB_DIRS_ZLIB})
+      find_package(ZLIB REQUIRED)
+    endif()
 endif(WIN32)
 
 add_subdirectory("cpprestsdk-2.9.1/Release")

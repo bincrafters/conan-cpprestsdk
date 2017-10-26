@@ -18,8 +18,8 @@ class CppRestSDKConan(ConanFile):
     version = "2.10.0"
     generators = "cmake"
     settings = "os", "arch", "compiler", "build_type"
-    options = {"shared": [True, False], "exclude_websockets": [True, False]}
-    default_options = "shared=True", "exclude_websockets=False"
+    options = {"shared": [True, False], "exclude_websockets": [True, False], "exclude_compression": [True, False]}
+    default_options = "shared=True", "exclude_websockets=False", "exclude_compression=False"
     exports_sources = "CMakeLists.txt"
     url = "https://github.com/bincrafters/conan-cpprestsdk"
     author = "Uilian Ries <uilianries@gmail.com>"
@@ -29,7 +29,8 @@ class CppRestSDKConan(ConanFile):
 
     def requirements(self):
         self.requires.add("OpenSSL/1.0.2l@conan/stable")
-        self.requires.add("zlib/1.2.11@conan/stable")
+        if not self.options.exclude_compression:
+            self.requires.add("zlib/1.2.11@conan/stable")
         if not self.options.exclude_websockets:
             self.requires.add("websocketpp/0.7.0@%s/%s" % (self.user, self.channel))
             self.requires.add("Boost.Random/1.65.1@%s/%s" % (self.user, self.channel))
@@ -103,6 +104,7 @@ class CppRestSDKConan(ConanFile):
         cmake.definitions["CMAKE_MODULE_PATH"] = getcwd().replace('\\', '/')
         cmake.definitions["WERROR"] = False
         cmake.definitions["CPPREST_EXCLUDE_WEBSOCKETS"] = self.options.exclude_websockets
+        cmake.definitions["CPPREST_EXCLUDE_COMPRESSION"] = self.options.exclude_compression
         if self.settings.os == "iOS":
             cmake.definitions["IOS"] = True
         elif self.settings.os == "Android":
