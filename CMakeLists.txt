@@ -5,9 +5,9 @@ cmake_minimum_required(VERSION 2.8.12)
 include(conanbuildinfo.cmake)
 CONAN_BASIC_SETUP()
 
-# Find Boost and zlib 
+# Find Boost and zlib
 if (WIN32)
-    find_package(Boost 1.64 COMPONENTS system date_time regex REQUIRED)
+    find_package(Boost 1.65.1 COMPONENTS system date_time regex REQUIRED)
 
     if (NOT CPPREST_EXCLUDE_COMPRESSION)
       set(ZLIB_ROOT ${CONAN_ZLIB_ROOT})
@@ -16,4 +16,4 @@ if (WIN32)
     endif()
 endif(WIN32)
 
-add_subdirectory("cpprestsdk-2.10.0/Release")
+add_subdirectory("cpprestsdk-2.10.1/Release")

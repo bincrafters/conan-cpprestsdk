@@ -15,32 +15,28 @@ def find_sysroot(sdk):
 
 class CppRestSDKConan(ConanFile):
     name = "cpprestsdk"
-    version = "2.10.0"
+    version = "2.10.1"
     generators = "cmake"
     settings = "os", "arch", "compiler", "build_type"
     options = {"shared": [True, False], "exclude_websockets": [True, False], "exclude_compression": [True, False]}
     default_options = "shared=True", "exclude_websockets=False", "exclude_compression=False"
-    exports_sources = "CMakeLists.txt"
+    exports = ["LICENSE.md"]
+    exports_sources = ["CMakeLists.txt"]
     url = "https://github.com/bincrafters/conan-cpprestsdk"
-    author = "Uilian Ries <uilianries@gmail.com>"
+    homepage = "https://github.com/Microsoft/cpprestsdk"
+    author = "Bincrafters <bincrafters@gmail.com>"
     description = "A project for cloud-based client-server communication in native code using a modern asynchronous C++ API design"
     license = "https://github.com/Microsoft/cpprestsdk/blob/master/license.txt"
     root = "%s-%s" % (name, version)
 
     def requirements(self):
-        self.requires.add("OpenSSL/1.0.2l@conan/stable")
+        self.requires.add("OpenSSL/1.0.2m@conan/stable", override=True)
         if not self.options.exclude_compression:
-            self.requires.add("zlib/1.2.11@conan/stable")
+            self.requires.add("zlib/1.2.11@conan/stable", override=True)
         if not self.options.exclude_websockets:
-            self.requires.add("websocketpp/0.7.0@%s/%s" % (self.user, self.channel))
-        self.requires.add("Boost.Random/1.64.0@%s/%s" % (self.user, self.channel))
-        self.requires.add("Boost.System/1.64.0@%s/%s" % (self.user, self.channel))
-        self.requires.add("Boost.Thread/1.64.0@%s/%s" % (self.user, self.channel))
-        self.requires.add("Boost.Filesystem/1.64.0@%s/%s" % (self.user, self.channel))
-        self.requires.add("Boost.Chrono/1.64.0@%s/%s" % (self.user, self.channel))
-        self.requires.add("Boost.Atomic/1.64.0@%s/%s" % (self.user, self.channel))
-        self.requires.add("Boost.Date_Time/1.64.0@%s/%s" % (self.user, self.channel))
-        self.requires.add("Boost.Regex/1.64.0@%s/%s" % (self.user, self.channel))
+            self.requires.add("websocketpp/0.7.0@bincrafters/stable")
+        for component in ["Random", "System", "Thread", "Filesystem", "Chrono", "Atomic", "Asio", "Date_Time", "Regex"]:
+            self.requires.add("Boost.%s/1.65.1@bincrafters/stable" % component, override=True)
 
     def source(self):
         source_url = "https://github.com/Microsoft/cpprestsdk"
@@ -110,15 +106,11 @@ class CppRestSDKConan(ConanFile):
             cmake.definitions["ANDROID"] = True
         cmake.configure()
         cmake.build()
+        cmake.install()
 
     def package(self):
-        self.copy("license.txt",  dst=".", src=self.root)
-        self.copy(pattern="*", dst="include", src=path.join(self.root, "Release", "include"))
-        self.copy(pattern="*.dll", dst="bin", src="bin", keep_path=False)
-        self.copy(pattern="*.lib", dst="lib", src="lib", keep_path=False)
-        self.copy(pattern="*.a", dst="lib", src="lib", keep_path=False)
-        self.copy(pattern="*.so*", dst="lib", src=path.join(self.root, "Release", "Binaries"), keep_path=False)
-        self.copy(pattern="*.dylib", dst="lib", src=path.join(self.root, "Release", "Binaries"), keep_path=False)
+        self.copy("license.txt",  dst="licenses", src=self.root)
+        
 
     def package_info(self):
         version_tokens = self.version.split(".")

@@ -1,4 +1,6 @@
-from conan.packager import ConanMultiPackager, os, re
+import re
+import os
+from conan.packager import ConanMultiPackager
 
 
 def get_name_version_from_recipe():
