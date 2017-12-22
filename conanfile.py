@@ -36,7 +36,7 @@ class CppRestSDKConan(ConanFile):
         if not self.options.exclude_websockets:
             self.requires.add("websocketpp/0.7.0@bincrafters/stable")
         for component in ["Random", "System", "Thread", "Filesystem", "Chrono", "Atomic", "Asio", "Date_Time", "Regex"]:
-            self.requires.add("Boost.%s/1.65.1@bincrafters/stable" % component, override=True)
+            self.requires.add("Boost.%s/1.64.0@bincrafters/stable" % component, override=True)
 
     def source(self):
         source_url = "https://github.com/Microsoft/cpprestsdk"
@@ -110,7 +110,7 @@ class CppRestSDKConan(ConanFile):
 
     def package(self):
         self.copy("license.txt",  dst="licenses", src=self.root)
-        
+
 
     def package_info(self):
         version_tokens = self.version.split(".")
