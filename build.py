@@ -39,7 +39,7 @@ if __name__ == "__main__":
     reference = "{0}/{1}".format(name, version)
     upload = "https://api.bintray.com/conan/{0}/public-conan".format(username)
 
-    builder = ConanMultiPackager(username=username, channel=channel, reference=reference, upload=upload,
+    builder = ConanMultiPackager(args="--build missing", username=username, channel=channel, reference=reference, upload=upload,
                                  upload_only_when_stable=True, stable_branch_pattern="stable/*")
     builder.add_common_builds(shared_option_name="%s:shared" % name)
     builder.run()
