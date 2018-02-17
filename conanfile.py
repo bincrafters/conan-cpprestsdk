@@ -52,7 +52,13 @@ class CppRestSDKConan(ConanFile):
         tools.get("{0}/archive/v{1}.tar.gz".format(source_url, self.version))
 
     def build(self):
+        if self.settings.compiler == 'Visual Studio':
+            with tools.vcvars(self.settings, force=True, filter_known_paths=False):
+                self.build_cmake()
+        else:
+            self.build_cmake()
 
+    def build_cmake(self):
         if self.settings.os == "iOS":
             with open('toolchain.cmake', 'w') as toolchain_cmake:
                 if self.settings.arch == "armv8":
@@ -71,7 +77,7 @@ class CppRestSDKConan(ConanFile):
                 toolchain_cmake.write('set(CMAKE_OSX_SYSROOT "%s" CACHE STRING "" FORCE)\n' % sysroot)
             environ['CONAN_CMAKE_TOOLCHAIN_FILE'] = path.join(getcwd(), 'toolchain.cmake')
 
-        cmake = CMake(self)
+        cmake = CMake(self, generator='Ninja')
         if self.settings.compiler != 'Visual Studio':
             cmake.definitions['CMAKE_POSITION_INDEPENDENT_CODE'] = self.options.fPIC
         cmake.definitions["BUILD_TESTS"] = False
