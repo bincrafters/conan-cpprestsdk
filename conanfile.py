@@ -27,6 +27,8 @@ class CppRestSDKConan(ConanFile):
                   "C++ API design"
     license = "https://github.com/Microsoft/cpprestsdk/blob/master/license.txt"
     root = "%s-%s" % (name, version)
+    short_paths = True
+
 
     def requirements(self):
         self.requires.add("OpenSSL/1.0.2l@conan/stable")
