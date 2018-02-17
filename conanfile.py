@@ -18,8 +18,8 @@ class CppRestSDKConan(ConanFile):
     version = "2.9.1"
     generators = "cmake"
     settings = "os", "arch", "compiler", "build_type"
-    options = {"shared": [True, False], "exclude_websockets": [True, False]}
-    default_options = "shared=True", "exclude_websockets=False"
+    options = {"shared": [True, False], "exclude_websockets": [True, False], "fPIC": [True, False]}
+    default_options = "shared=False", "exclude_websockets=False", "fPIC=True"
     exports_sources = "CMakeLists.txt"
     url = "https://github.com/bincrafters/conan-cpprestsdk"
     author = "Uilian Ries <uilianries@gmail.com>"
@@ -29,6 +29,9 @@ class CppRestSDKConan(ConanFile):
     root = "%s-%s" % (name, version)
     short_paths = True
 
+    def configure(self):
+        if self.settings.compiler == 'Visual Studio':
+            del self.options.fPIC
 
     def requirements(self):
         self.requires.add("OpenSSL/1.0.2l@conan/stable")
@@ -101,6 +104,8 @@ class CppRestSDKConan(ConanFile):
             environ['CONAN_CMAKE_TOOLCHAIN_FILE'] = path.join(getcwd(), 'toolchain.cmake')
 
         cmake = CMake(self)
+        if self.settings.compiler != 'Visual Studio':
+            cmake.definitions['CMAKE_POSITION_INDEPENDENT_CODE'] = self.options.fPIC
         cmake.definitions["BUILD_TESTS"] = False
         cmake.definitions["BUILD_SAMPLES"] = False
         cmake.definitions["BUILD_SAMPLES"] = False
