@@ -1,7 +1,6 @@
 from __future__ import print_function
 from conans import ConanFile, CMake, tools
 from os import path, getcwd, environ
-import fnmatch
 import subprocess
 
 
@@ -18,16 +17,26 @@ class CppRestSDKConan(ConanFile):
     version = "2.10.1"
     generators = "cmake"
     settings = "os", "arch", "compiler", "build_type"
-    options = {"shared": [True, False], "exclude_websockets": [True, False], "exclude_compression": [True, False]}
-    default_options = "shared=True", "exclude_websockets=False", "exclude_compression=False"
+    options = {"shared": [True, False],
+               "exclude_websockets": [True, False],
+               "exclude_compression": [True, False],
+               "fPIC": [True, False]}
+    default_options = "shared=False", "exclude_websockets=False", "fPIC=True", "exclude_compression=False"
     exports = ["LICENSE.md"]
     exports_sources = ["CMakeLists.txt"]
+    generators = ['cmake']
     url = "https://github.com/bincrafters/conan-cpprestsdk"
     homepage = "https://github.com/Microsoft/cpprestsdk"
     author = "Bincrafters <bincrafters@gmail.com>"
-    description = "A project for cloud-based client-server communication in native code using a modern asynchronous C++ API design"
+    description = "A project for cloud-based client-server communication in native code using a modern asynchronous " \
+                  "C++ API design"
     license = "https://github.com/Microsoft/cpprestsdk/blob/master/license.txt"
     root = "%s-%s" % (name, version)
+    short_paths = True
+
+    def configure(self):
+        if self.settings.compiler == 'Visual Studio':
+            del self.options.fPIC
 
     def requirements(self):
         self.requires.add("OpenSSL/1.0.2m@conan/stable", override=True)
@@ -35,46 +44,29 @@ class CppRestSDKConan(ConanFile):
             self.requires.add("zlib/1.2.11@conan/stable", override=True)
         if not self.options.exclude_websockets:
             self.requires.add("websocketpp/0.7.0@bincrafters/stable")
-        for component in ["Random", "System", "Thread", "Filesystem", "Chrono", "Atomic", "Asio", "Date_Time", "Regex"]:
-            self.requires.add("Boost.%s/1.64.0@bincrafters/stable" % component, override=True)
+            self.requires.add("boost_random/1.66.0@bincrafters/stable")
+            self.requires.add("boost_system/1.66.0@bincrafters/stable")
+            self.requires.add("boost_thread/1.66.0@bincrafters/stable")
+            self.requires.add("boost_filesystem/1.66.0@bincrafters/stable")
+            self.requires.add("boost_chrono/1.66.0@bincrafters/stable")
+            self.requires.add("boost_atomic/1.66.0@bincrafters/stable")
+            self.requires.add("boost_asio/1.66.0@bincrafters/stable")
+            self.requires.add("boost_date_time/1.66.0@bincrafters/stable")
+            self.requires.add("boost_regex/1.66.0@bincrafters/stable")
+            self.requires.add("cmake_findboost_modular/1.66.0@bincrafters/stable")
 
     def source(self):
         source_url = "https://github.com/Microsoft/cpprestsdk"
         tools.get("{0}/archive/v{1}.tar.gz".format(source_url, self.version))
 
-    def generate_find_boost(self):
-        boost_include_dirs = []
-        boost_library_dirs = []
-        boost_libraries = []
-        for (pkg_name, cpp_info) in self.deps_cpp_info.dependencies:
-            if fnmatch.fnmatch(pkg_name, "Boost.*"):
-                boost_include_dirs.extend([path.join(cpp_info.rootpath, d) for d in cpp_info.includedirs])
-                if cpp_info.libs:
-                    boost_library_dirs.extend([path.join(cpp_info.rootpath, d) for d in cpp_info.libdirs])
-                    boost_libraries.extend(cpp_info.libs)
-
-        boost_include_dirs = ";".join(boost_include_dirs).replace('\\', '/')
-        boost_library_dirs = ";".join(boost_library_dirs).replace('\\', '/')
-        boost_libraries = ";".join(boost_libraries)
-
-        # we have to use our own FindBoost.cmake, as CMake's one does not support modular boost
-        with open("FindBoost.cmake", "w") as boost_config:
-            boost_config.write('message(STATUS "using boost config")\n')
-            boost_config.write('set(Boost_INCLUDE_DIRS "%s")\n' % boost_include_dirs)
-            boost_config.write('set(Boost_LIBRARY_DIRS "%s")\n' % boost_library_dirs)
-            boost_config.write('set(Boost_LIBRARIES "%s")\n' % boost_libraries)
-            boost_config.write('set(Boost_FOUND ON)\n')
-            for (pkg_name, cpp_info) in self.deps_cpp_info.dependencies:
-                if fnmatch.fnmatch(pkg_name, "Boost.*") and cpp_info.libs:
-                    for library in cpp_info.libs:
-                        library_name = library.split('-')[0]
-                        library_name = '_'.join(library_name.split('_')[1:]).upper()
-
-                        boost_config.write('set(Boost_%s_LIBRARY "%s")\n' % (library_name, library))
-
     def build(self):
-        self.generate_find_boost()
+        if self.settings.compiler == 'Visual Studio':
+            with tools.vcvars(self.settings, force=True, filter_known_paths=False):
+                self.build_cmake()
+        else:
+            self.build_cmake()
 
+    def build_cmake(self):
         if self.settings.os == "iOS":
             with open('toolchain.cmake', 'w') as toolchain_cmake:
                 if self.settings.arch == "armv8":
@@ -93,10 +85,11 @@ class CppRestSDKConan(ConanFile):
                 toolchain_cmake.write('set(CMAKE_OSX_SYSROOT "%s" CACHE STRING "" FORCE)\n' % sysroot)
             environ['CONAN_CMAKE_TOOLCHAIN_FILE'] = path.join(getcwd(), 'toolchain.cmake')
 
-        cmake = CMake(self)
+        cmake = CMake(self, generator='Ninja')
+        if self.settings.compiler != 'Visual Studio':
+            cmake.definitions['CMAKE_POSITION_INDEPENDENT_CODE'] = self.options.fPIC
         cmake.definitions["BUILD_TESTS"] = False
         cmake.definitions["BUILD_SAMPLES"] = False
-        cmake.definitions["CMAKE_MODULE_PATH"] = getcwd().replace('\\', '/')
         cmake.definitions["WERROR"] = False
         cmake.definitions["CPPREST_EXCLUDE_WEBSOCKETS"] = self.options.exclude_websockets
         cmake.definitions["CPPREST_EXCLUDE_COMPRESSION"] = self.options.exclude_compression
@@ -109,8 +102,13 @@ class CppRestSDKConan(ConanFile):
         cmake.install()
 
     def package(self):
-        self.copy("license.txt",  dst="licenses", src=self.root)
-
+        self.copy("license.txt", dst="license", src=self.root)
+        self.copy(pattern="*", dst="include", src=path.join(self.root, "Release", "include"))
+        self.copy(pattern="*.dll", dst="bin", src="bin", keep_path=False)
+        self.copy(pattern="*.lib", dst="lib", src="lib", keep_path=False)
+        self.copy(pattern="*.a", dst="lib", src="lib", keep_path=False)
+        self.copy(pattern="*.so*", dst="lib", src=path.join(self.root, "Release", "Binaries"), keep_path=False)
+        self.copy(pattern="*.dylib", dst="lib", src=path.join(self.root, "Release", "Binaries"), keep_path=False)
 
     def package_info(self):
         version_tokens = self.version.split(".")
