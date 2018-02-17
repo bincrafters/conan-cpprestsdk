@@ -76,7 +76,6 @@ class CppRestSDKConan(ConanFile):
             cmake.definitions['CMAKE_POSITION_INDEPENDENT_CODE'] = self.options.fPIC
         cmake.definitions["BUILD_TESTS"] = False
         cmake.definitions["BUILD_SAMPLES"] = False
-        cmake.definitions["BUILD_SAMPLES"] = False
         cmake.definitions["WERROR"] = False
         cmake.definitions["CPPREST_EXCLUDE_WEBSOCKETS"] = self.options.exclude_websockets
         if self.settings.os == "iOS":
