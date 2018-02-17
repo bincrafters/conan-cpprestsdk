@@ -86,7 +86,7 @@ class CppRestSDKConan(ConanFile):
         cmake.build()
 
     def package(self):
-        self.copy("license.txt",  dst=".", src=self.root)
+        self.copy("license.txt", dst="license", src=self.root)
         self.copy(pattern="*", dst="include", src=path.join(self.root, "Release", "include"))
         self.copy(pattern="*.dll", dst="bin", src="bin", keep_path=False)
         self.copy(pattern="*.lib", dst="lib", src="lib", keep_path=False)
