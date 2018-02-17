@@ -23,7 +23,8 @@ class CppRestSDKConan(ConanFile):
     exports_sources = "CMakeLists.txt"
     url = "https://github.com/bincrafters/conan-cpprestsdk"
     author = "Uilian Ries <uilianries@gmail.com>"
-    description = "A project for cloud-based client-server communication in native code using a modern asynchronous C++ API design"
+    description = "A project for cloud-based client-server communication in native code using a modern asynchronous " \
+                  "C++ API design"
     license = "https://github.com/Microsoft/cpprestsdk/blob/master/license.txt"
     root = "%s-%s" % (name, version)
 
