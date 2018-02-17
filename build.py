@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+from bincrafters import build_template_default
+
 
 def add_build_requires(builds):
     return map(add_required_installers, builds)
