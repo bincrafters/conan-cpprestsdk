@@ -1,7 +1,6 @@
 from __future__ import print_function
 from conans import ConanFile, CMake, tools
 from os import path, getcwd, environ
-import fnmatch
 import subprocess
 
 
@@ -46,44 +45,13 @@ class CppRestSDKConan(ConanFile):
             self.requires.add("boost_atomic/1.66.0@bincrafters/stable")
             self.requires.add("boost_date_time/1.66.0@bincrafters/stable")
             self.requires.add("boost_regex/1.66.0@bincrafters/stable")
+            self.requires.add("cmake_findboost_modular/1.66.0@bincrafters/stable")
 
     def source(self):
         source_url = "https://github.com/Microsoft/cpprestsdk"
         tools.get("{0}/archive/v{1}.tar.gz".format(source_url, self.version))
 
-    def generate_find_boost(self):
-        boost_include_dirs = []
-        boost_library_dirs = []
-        boost_libraries = []
-        for (pkg_name, cpp_info) in self.deps_cpp_info.dependencies:
-            if fnmatch.fnmatch(pkg_name, "Boost.*"):
-                boost_include_dirs.extend([path.join(cpp_info.rootpath, d) for d in cpp_info.includedirs])
-                if cpp_info.libs:
-                    boost_library_dirs.extend([path.join(cpp_info.rootpath, d) for d in cpp_info.libdirs])
-                    boost_libraries.extend(cpp_info.libs)
-
-        boost_include_dirs = ";".join(boost_include_dirs).replace('\\', '/')
-        boost_library_dirs = ";".join(boost_library_dirs).replace('\\', '/')
-        boost_libraries = ";".join(boost_libraries)
-
-        # we have to use our own FindBoost.cmake, as CMake's one does not support modular boost
-        with open("FindBoost.cmake", "w") as boost_config:
-            boost_config.write('message(STATUS "using boost config")\n')
-            boost_config.write('set(Boost_INCLUDE_DIRS "%s")\n' % boost_include_dirs)
-            boost_config.write('set(Boost_LIBRARY_DIRS "%s")\n' % boost_library_dirs)
-            boost_config.write('set(Boost_LIBRARIES "%s")\n' % boost_libraries)
-            boost_config.write('set(Boost_FOUND ON)\n')
-            for (pkg_name, cpp_info) in self.deps_cpp_info.dependencies:
-                if fnmatch.fnmatch(pkg_name, "Boost.*") and cpp_info.libs:
-                    for library in cpp_info.libs:
-                        library_name = library.split('-')[0]
-                        library_name = '_'.join(library_name.split('_')[1:]).upper()
-
-                        boost_config.write('set(Boost_%s_LIBRARY "%s")\n' % (library_name, library))
-
     def build(self):
-        if not self.options.exclude_websockets:
-            self.generate_find_boost()
 
         if self.settings.os == "iOS":
             with open('toolchain.cmake', 'w') as toolchain_cmake:
@@ -109,7 +77,6 @@ class CppRestSDKConan(ConanFile):
         cmake.definitions["BUILD_TESTS"] = False
         cmake.definitions["BUILD_SAMPLES"] = False
         cmake.definitions["BUILD_SAMPLES"] = False
-        cmake.definitions["CMAKE_MODULE_PATH"] = getcwd().replace('\\', '/')
         cmake.definitions["WERROR"] = False
         cmake.definitions["CPPREST_EXCLUDE_WEBSOCKETS"] = self.options.exclude_websockets
         if self.settings.os == "iOS":
