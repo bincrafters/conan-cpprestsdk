@@ -37,15 +37,15 @@ class CppRestSDKConan(ConanFile):
         self.requires.add("OpenSSL/1.0.2l@conan/stable")
         self.requires.add("zlib/1.2.11@conan/stable")
         if not self.options.exclude_websockets:
-            self.requires.add("websocketpp/0.7.0@%s/%s" % (self.user, self.channel))
-            self.requires.add("Boost.Random/1.65.1@%s/%s" % (self.user, self.channel))
-            self.requires.add("Boost.System/1.65.1@%s/%s" % (self.user, self.channel))
-            self.requires.add("Boost.Thread/1.65.1@%s/%s" % (self.user, self.channel))
-            self.requires.add("Boost.Filesystem/1.65.1@%s/%s" % (self.user, self.channel))
-            self.requires.add("Boost.Chrono/1.65.1@%s/%s" % (self.user, self.channel))
-            self.requires.add("Boost.Atomic/1.65.1@%s/%s" % (self.user, self.channel))
-            self.requires.add("Boost.Date_Time/1.65.1@%s/%s" % (self.user, self.channel))
-            self.requires.add("Boost.Regex/1.65.1@%s/%s" % (self.user, self.channel))
+            self.requires.add("websocketpp/0.7.0@bincrafters/stable")
+            self.requires.add("boost_random/1.66.0@bincrafters/stable")
+            self.requires.add("boost_system/1.66.0@bincrafters/stable")
+            self.requires.add("boost_thread/1.66.0@bincrafters/stable")
+            self.requires.add("boost_filesystem/1.66.0@bincrafters/stable")
+            self.requires.add("boost_chrono/1.66.0@bincrafters/stable")
+            self.requires.add("boost_atomic/1.66.0@bincrafters/stable")
+            self.requires.add("boost_date_time/1.66.0@bincrafters/stable")
+            self.requires.add("boost_regex/1.66.0@bincrafters/stable")
 
     def source(self):
         source_url = "https://github.com/Microsoft/cpprestsdk"
