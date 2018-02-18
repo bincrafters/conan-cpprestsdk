@@ -59,6 +59,10 @@ class CppRestSDKConan(ConanFile):
         source_url = "https://github.com/Microsoft/cpprestsdk"
         tools.get("{0}/archive/v{1}.tar.gz".format(source_url, self.version))
 
+        if self.settings.compiler == 'clang' and str(self.settings.compiler.libcxx) in ['libstdc++', 'libstdc++11']:
+            tools.replace_in_file(path.join('cpprestsdk-%s' % self.version, 'Release', 'CMakeLists.txt'),
+                                  'libc++', 'libstdc++')
+
     def build(self):
         if self.settings.compiler == 'Visual Studio':
             with tools.vcvars(self.settings, force=True, filter_known_paths=False):
