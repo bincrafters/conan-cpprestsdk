@@ -107,8 +107,8 @@ class CppRestSDKConan(ConanFile):
         self.copy(pattern="*.dll", dst="bin", src="bin", keep_path=False)
         self.copy(pattern="*.lib", dst="lib", src="lib", keep_path=False)
         self.copy(pattern="*.a", dst="lib", src="lib", keep_path=False)
-        self.copy(pattern="*.so*", dst="lib", src=path.join(self.root, "Release", "Binaries"), keep_path=False)
-        self.copy(pattern="*.dylib", dst="lib", src=path.join(self.root, "Release", "Binaries"), keep_path=False)
+        self.copy(pattern="*.so*", dst="lib", src="lib", keep_path=False)
+        self.copy(pattern="*.dylib", dst="lib", src="lib", keep_path=False)
 
     def package_info(self):
         version_tokens = self.version.split(".")
