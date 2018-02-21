@@ -7,7 +7,9 @@ CONAN_BASIC_SETUP()
 
 # Find Boost and zlib 
 if (WIN32)
-    find_package(Boost 1.66 COMPONENTS system date_time regex REQUIRED)
+    if (NOT CPPREST_EXCLUDE_WEBSOCKETS)
+        find_package(Boost 1.66 COMPONENTS system date_time regex REQUIRED)
+    endif()
 
     set(ZLIB_ROOT ${CONAN_ZLIB_ROOT})
     set(ZLIB_LIBRARYDIR ${CONAN_LIB_DIRS_ZLIB})
