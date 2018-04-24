@@ -89,7 +89,7 @@ class CppRestSDKConan(ConanFile):
                 toolchain_cmake.write('set(CMAKE_OSX_SYSROOT "%s" CACHE STRING "" FORCE)\n' % sysroot)
             environ['CONAN_CMAKE_TOOLCHAIN_FILE'] = path.join(getcwd(), 'toolchain.cmake')
 
-        cmake = CMake(self, generator='Ninja')
+        cmake = CMake(self)
         if self.settings.compiler != 'Visual Studio':
             cmake.definitions['CMAKE_POSITION_INDEPENDENT_CODE'] = self.options.fPIC
         cmake.definitions["BUILD_TESTS"] = False

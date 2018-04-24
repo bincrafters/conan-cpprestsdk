@@ -7,6 +7,13 @@ class TestPackageConan(ConanFile):
     generators = "cmake"
 
     def build(self):
+        if self.settings.compiler == 'Visual Studio':
+            with tools.vcvars(self.settings, force=True, filter_known_paths=False):
+                self.build_cmake()
+        else:
+            self.build_cmake()
+
+    def build_cmake(self):
         cmake = CMake(self)
         cmake.configure()
         cmake.build()
