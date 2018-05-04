@@ -103,6 +103,7 @@ class CppRestSDKConan(ConanFile):
             cmake.definitions["IOS"] = True
         elif self.settings.os == "Android":
             cmake.definitions["ANDROID"] = True
+            cmake.definitions["CONAN_LIBCXX"] = ''
         cmake.configure()
         cmake.build()
         cmake.install()
