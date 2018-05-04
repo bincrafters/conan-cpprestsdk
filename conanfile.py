@@ -64,6 +64,7 @@ class CppRestSDKConan(ConanFile):
                                   'libc++', 'libstdc++')
         if self.settings.os == 'Android':
             tools.replace_in_file(path.join('cpprestsdk-%s' % self.version, 'Release', 'cmake', 'cpprest_find_boost.cmake'), 'find_host_package', 'find_package')
+            tools.replace_in_file(path.join('cpprestsdk-%s' % self.version, 'Release', 'src', 'pch', 'stdafx.h'), '#include "boost/config/stdlib/libstdcpp3.hpp"', '//#include "boost/config/stdlib/libstdcpp3.hpp"')
 
     def build(self):
         if self.settings.compiler == 'Visual Studio':
