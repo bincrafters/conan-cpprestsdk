@@ -62,6 +62,8 @@ class CppRestSDKConan(ConanFile):
         if self.settings.compiler == 'clang' and str(self.settings.compiler.libcxx) in ['libstdc++', 'libstdc++11']:
             tools.replace_in_file(path.join('cpprestsdk-%s' % self.version, 'Release', 'CMakeLists.txt'),
                                   'libc++', 'libstdc++')
+        if self.settings.os == 'Android':
+            tools.replace_in_file(path.join('cpprestsdk-%s' % self.version, 'Release', 'cmake', 'cpprest_find_boost.cmake'), 'find_host_package', 'find_package')
 
     def build(self):
         if self.settings.compiler == 'Visual Studio':
