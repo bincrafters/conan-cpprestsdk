@@ -14,7 +14,7 @@ def find_sysroot(sdk):
 
 class CppRestSDKConan(ConanFile):
     name = "cpprestsdk"
-    version = "2.10.1"
+    version = "2.10.2"
     generators = "cmake"
     settings = "os", "arch", "compiler", "build_type"
     options = {"shared": [True, False],
@@ -103,6 +103,7 @@ class CppRestSDKConan(ConanFile):
         cmake.definitions["WERROR"] = False
         cmake.definitions["CPPREST_EXCLUDE_WEBSOCKETS"] = self.options.exclude_websockets
         cmake.definitions["CPPREST_EXCLUDE_COMPRESSION"] = self.options.exclude_compression
+        cmake.definitions["CPPREST_VERSION"] = self.version
         if self.settings.os == "iOS":
             cmake.definitions["IOS"] = True
         elif self.settings.os == "Android":
@@ -122,9 +123,17 @@ class CppRestSDKConan(ConanFile):
         self.copy(pattern="*.dylib", dst="lib", src="lib", keep_path=False)
 
     def package_info(self):
-        version_tokens = self.version.split(".")
-        versioned_name = "cpprest_%s_%s" % (version_tokens[0], version_tokens[1])
-        lib_name = versioned_name if self.settings.compiler == "Visual Studio" else "cpprest"
+        if self.settings.compiler == "Visual Studio":
+            debug_suffix = 'd' if self.settings.build_type == 'Debug' else ''
+            version_tokens = self.version.split(".")
+            vs_version = str(self.settings.compiler.version) + '0'
+            versioned_name = "cpprest%s_%s_%s%s" % (vs_version, version_tokens[0], version_tokens[1], debug_suffix)
+            # CppRestSDK uses different library name depends on CMAKE_VS_PLATFORM_TOOLSET
+            if not path.isfile(path.join(self.package_folder, 'lib', '%s.lib' % versioned_name)):
+                versioned_name = "cpprest_%s_%s%s" % (version_tokens[0], version_tokens[1], debug_suffix)
+            lib_name = versioned_name
+        else:
+            lib_name = 'cpprest'
         self.cpp_info.libs.append(lib_name)
         if self.settings.os == "Linux":
             self.cpp_info.libs.append("pthread")
