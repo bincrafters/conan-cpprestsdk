@@ -138,6 +138,6 @@ class CppRestSDKConan(ConanFile):
         if self.settings.os == "Linux":
             self.cpp_info.libs.append("pthread")
         elif self.settings.os == "Windows":
-            self.cpp_info.libs.append("winhttp")
+            self.cpp_info.libs.extend(["winhttp", "httpapi", "bcrypt"])
         if not self.options.shared:
             self.cpp_info.defines.append("_NO_ASYNCRTIMP")
