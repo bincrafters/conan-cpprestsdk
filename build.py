@@ -16,6 +16,6 @@ if __name__ == "__main__":
 
     builder = build_template_default.get_builder()
 
-    builder.items = add_build_requires(builder.items)
+    #builder.items = add_build_requires(builder.items)
 
     builder.run()
