@@ -23,7 +23,7 @@ class CppRestSDKConan(ConanFile):
                "fPIC": [True, False]}
     default_options = "shared=False", "exclude_websockets=False", "fPIC=True", "exclude_compression=False"
     exports = ["LICENSE.md"]
-    exports_sources = ["CMakeLists.txt"]
+    exports_sources = ["CMakeLists.txt", 'FindOpenSSL.cmake']
     generators = ['cmake']
     url = "https://github.com/bincrafters/conan-cpprestsdk"
     homepage = "https://github.com/Microsoft/cpprestsdk"
