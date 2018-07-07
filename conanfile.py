@@ -104,6 +104,10 @@ class CppRestSDKConan(ConanFile):
         cmake.definitions["CPPREST_EXCLUDE_WEBSOCKETS"] = self.options.exclude_websockets
         cmake.definitions["CPPREST_EXCLUDE_COMPRESSION"] = self.options.exclude_compression
         cmake.definitions["CPPREST_VERSION"] = self.version
+        cmake.definitions["OPENSSL_ROOT_DIR"] = self.deps_cpp_info['OpenSSL'].rootpath
+        cmake.definitions["OPENSSL_USE_STATIC_LIBS"] = not self.options['OpenSSL'].shared
+        if self.settings.compiler == 'Visual Studio':
+            cmake.definitions["OPENSSL_MSVC_STATIC_RT"] = 'MT' in str(self.settings.compiler.runtime)
         if self.settings.os == "iOS":
             cmake.definitions["IOS"] = True
         elif self.settings.os == "Android":
