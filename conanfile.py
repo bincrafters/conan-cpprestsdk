@@ -148,3 +148,6 @@ class CppRestSDKConan(ConanFile):
             self.cpp_info.libs.extend(["winhttp", "httpapi", "bcrypt"])
         if not self.options.shared:
             self.cpp_info.defines.append("_NO_ASYNCRTIMP")
+        if self.settings.os == "Macos":
+            self.cpp_info.exelinkflags.append("-framework CoreFoundation")
+            self.cpp_info.exelinkflags.append("-framework Security")
