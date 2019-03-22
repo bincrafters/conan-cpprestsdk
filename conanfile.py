@@ -14,7 +14,7 @@ def find_sysroot(sdk):
 
 class CppRestSDKConan(ConanFile):
     name = "cpprestsdk"
-    version = "2.10.10"
+    version = "2.10.11"
     generators = "cmake"
     settings = "os", "arch", "compiler", "build_type"
     options = {
