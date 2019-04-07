@@ -14,7 +14,7 @@ def find_sysroot(sdk):
 
 class CppRestSDKConan(ConanFile):
     name = "cpprestsdk"
-    version = "2.10.10"
+    version = "2.10.12"
     generators = "cmake"
     settings = "os", "arch", "compiler", "build_type"
     options = {
@@ -58,7 +58,8 @@ class CppRestSDKConan(ConanFile):
         self.requires.add("cmake_findboost_modular/1.69.0@bincrafters/stable")
 
     def source(self):
-        tools.get("{0}/archive/v{1}.tar.gz".format(self.homepage, self.version))
+        tools.get("{0}/archive/v{1}.tar.gz".format(self.homepage, self.version),
+                  sha256="c7c2a5deb4cad036b974e9b7f2ba2e3ae829312894ddfca2fae3a11980fef63e")
 
         if self.settings.compiler == 'clang' and str(self.settings.compiler.libcxx) in ['libstdc++', 'libstdc++11']:
             tools.replace_in_file(path.join('cpprestsdk-%s' % self.version, 'Release', 'CMakeLists.txt'),
