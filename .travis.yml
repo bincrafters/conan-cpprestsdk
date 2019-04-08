@@ -45,7 +45,7 @@ matrix:
       - <<: *linux
         env: CONAN_CLANG_VERSIONS=6.0 CONAN_DOCKER_IMAGE=conanio/clang60 CONAN_ARCHS=x86 CONAN_DOCKER_32_IMAGES
       - <<: *linux
-        env: CONAN_CLANG_VERSIONS=7.0 CONAN_DOCKER_IMAGE=conanio/clang60 CONAN_ARCHS=x86_64
+        env: CONAN_CLANG_VERSIONS=6.0 CONAN_DOCKER_IMAGE=conanio/clang60 CONAN_ARCHS=x86_64
       - <<: *linux
         env: CONAN_CLANG_VERSIONS=7.0 CONAN_DOCKER_IMAGE=conanio/clang7 CONAN_ARCHS=x86 CONAN_DOCKER_32_IMAGES
       - <<: *linux
