@@ -5,6 +5,10 @@ cmake_minimum_required(VERSION 2.8.12)
 include(conanbuildinfo.cmake)
 CONAN_BASIC_SETUP()
 
+if(CMAKE_COMPILER_IS_GNUCC AND)
+	add_definitions(-Wno-conversion)
+endif()
+
 set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR};${CMAKE_MODULE_PATH}")
 
 # Find Boost and zlib
