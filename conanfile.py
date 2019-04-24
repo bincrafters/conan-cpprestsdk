@@ -15,7 +15,17 @@ def find_sysroot(sdk):
 class CppRestSDKConan(ConanFile):
     name = "cpprestsdk"
     version = "2.10.12"
+    description = "A project for cloud-based client-server communication in native code using a modern asynchronous " \
+                  "C++ API design"
+    topics = ("conan", "cpprestsdk", "rest", "client", "http")
+    url = "https://github.com/bincrafters/conan-cpprestsdk"
+    homepage = "https://github.com/Microsoft/cpprestsdk"
+    author = "Bincrafters <bincrafters@gmail.com>"
+    license = "MIT"
+    exports = ["LICENSE.md"]
+    exports_sources = ["CMakeLists.txt", 'FindOpenSSL.cmake']
     generators = "cmake"
+
     settings = "os", "arch", "compiler", "build_type"
     options = {
         "shared": [True, False],
@@ -23,17 +33,13 @@ class CppRestSDKConan(ConanFile):
         "exclude_compression": [True, False],
         "fPIC": [True, False]
     }
-    default_options = {'shared': False, 'exclude_websockets': False, 'fPIC': True, 'exclude_compression': False}
-    exports = ["LICENSE.md"]
-    exports_sources = ["CMakeLists.txt", 'FindOpenSSL.cmake']
-    generators = ['cmake']
-    topics = ("conan", "cpprestsdk", "rest", "client", "http")
-    url = "https://github.com/bincrafters/conan-cpprestsdk"
-    homepage = "https://github.com/Microsoft/cpprestsdk"
-    author = "Bincrafters <bincrafters@gmail.com>"
-    description = "A project for cloud-based client-server communication in native code using a modern asynchronous " \
-                  "C++ API design"
-    license = "MIT"
+    default_options = {
+        "shared": False,
+        "exclude_websockets": False,
+        "fPIC": True,
+        "exclude_compression": False
+    }
+
     root = "%s-%s" % (name, version)
     short_paths = True
 
@@ -42,7 +48,7 @@ class CppRestSDKConan(ConanFile):
             del self.options.fPIC
 
     def requirements(self):
-        self.requires.add("OpenSSL/1.0.2q@conan/stable")
+        self.requires.add("OpenSSL/1.0.2r@conan/stable")
         if not self.options.exclude_compression:
             self.requires.add("zlib/1.2.11@conan/stable")
         if not self.options.exclude_websockets:
@@ -99,8 +105,6 @@ class CppRestSDKConan(ConanFile):
             environ['CONAN_CMAKE_TOOLCHAIN_FILE'] = path.join(getcwd(), 'toolchain.cmake')
 
         cmake = CMake(self)
-        if self.settings.compiler != 'Visual Studio':
-            cmake.definitions['CMAKE_POSITION_INDEPENDENT_CODE'] = self.options.fPIC
         cmake.definitions["BUILD_TESTS"] = False
         cmake.definitions["BUILD_SAMPLES"] = False
         cmake.definitions["WERROR"] = False

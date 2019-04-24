@@ -1,9 +1,8 @@
-PROJECT(conan-cpprestsdk)
-
-MESSAGE(WARNING "Conan CppRestSDK Wrapped CMake")
 cmake_minimum_required(VERSION 2.8.12)
+project(cmake_wrapper)
+
 include(conanbuildinfo.cmake)
-CONAN_BASIC_SETUP()
+conan_basic_setup()
 
 if(CMAKE_COMPILER_IS_GNUCC)
 	add_definitions(-Wno-conversion)
