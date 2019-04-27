@@ -1,6 +1,6 @@
 from __future__ import print_function
 from conans import ConanFile, CMake, tools
-from os import path, getcwd, environ
+from os import path, getcwd, environ, rename
 import subprocess
 
 
@@ -23,7 +23,7 @@ class CppRestSDKConan(ConanFile):
     author = "Bincrafters <bincrafters@gmail.com>"
     license = "MIT"
     exports = ["LICENSE.md"]
-    exports_sources = ["CMakeLists.txt", 'FindOpenSSL.cmake']
+    exports_sources = ["CMakeLists.txt", "FindOpenSSL.cmake"]
     generators = "cmake"
 
     settings = "os", "arch", "compiler", "build_type"
@@ -39,6 +39,9 @@ class CppRestSDKConan(ConanFile):
         "fPIC": True,
         "exclude_compression": False
     }
+
+    _source_subfolder = "source_subfolder"
+    _build_subfolder = "build_subfolder"
 
     root = "%s-%s" % (name, version)
     short_paths = True
@@ -65,27 +68,30 @@ class CppRestSDKConan(ConanFile):
         self.requires.add("cmake_findboost_modular/1.69.0@bincrafters/stable")
 
     def source(self):
-        tools.get("{0}/archive/v{1}.tar.gz".format(self.homepage, self.version),
-                  sha256="c7c2a5deb4cad036b974e9b7f2ba2e3ae829312894ddfca2fae3a11980fef63e")
+        sha256 = "c7c2a5deb4cad036b974e9b7f2ba2e3ae829312894ddfca2fae3a11980fef63e"
+        tools.get("{0}/archive/v{1}.tar.gz".format(self.homepage, self.version), sha256=sha256)
+        extracted_dir = self.name + "-" + self.version
+
+        rename(extracted_dir, self._source_subfolder)
 
         if self.settings.compiler == 'clang' and str(self.settings.compiler.libcxx) in ['libstdc++', 'libstdc++11']:
-            tools.replace_in_file(path.join('cpprestsdk-%s' % self.version, 'Release', 'CMakeLists.txt'),
+            tools.replace_in_file(path.join(self._source_subfolder, 'Release', 'CMakeLists.txt'),
                                   'libc++', 'libstdc++')
         if self.settings.os == 'Android':
-            tools.replace_in_file(path.join('cpprestsdk-%s' % self.version, 'Release', 'cmake', 'cpprest_find_boost.cmake'), 'find_host_package', 'find_package')
-            tools.replace_in_file(path.join('cpprestsdk-%s' % self.version, 'Release', 'src', 'pch', 'stdafx.h'), '#include "boost/config/stdlib/libstdcpp3.hpp"', '//#include "boost/config/stdlib/libstdcpp3.hpp"')
-            tools.replace_in_file(path.join('cpprestsdk-%s' % self.version, 'Release', 'src', 'http', 'client', 'http_client_asio.cpp'),
+            tools.replace_in_file(path.join(self._source_subfolder, 'Release', 'cmake', 'cpprest_find_boost.cmake'), 'find_host_package', 'find_package')
+            tools.replace_in_file(path.join(self._source_subfolder, 'Release', 'src', 'pch', 'stdafx.h'), '#include "boost/config/stdlib/libstdcpp3.hpp"', '//#include "boost/config/stdlib/libstdcpp3.hpp"')
+            tools.replace_in_file(path.join(self._source_subfolder, 'Release', 'src', 'http', 'client', 'http_client_asio.cpp'),
                                   'm_timer.expires_from_now(m_duration)',
                                   'm_timer.expires_from_now(std::chrono::microseconds(m_duration.count()))')
 
     def build(self):
         if self.settings.compiler == 'Visual Studio':
             with tools.vcvars(self.settings, force=True, filter_known_paths=False):
-                self.build_cmake()
+                self._build_cmake()
         else:
-            self.build_cmake()
+            self._build_cmake()
 
-    def build_cmake(self):
+    def _configure_cmake(self):
         if self.settings.os == "iOS":
             with open('toolchain.cmake', 'w') as toolchain_cmake:
                 if self.settings.arch == "armv8":
@@ -120,13 +126,20 @@ class CppRestSDKConan(ConanFile):
         elif self.settings.os == "Android":
             cmake.definitions["ANDROID"] = True
             cmake.definitions["CONAN_LIBCXX"] = ''
-        cmake.configure()
+        cmake.configure(build_folder=self._build_subfolder)
+        return cmake
+
+    def _build_cmake(self):
+        cmake = self._configure_cmake()
         cmake.build()
-        cmake.install()
 
     def package(self):
-        self.copy("license.txt", dst="license", src=self.root)
-        self.copy(pattern="*", dst="include", src=path.join(self.root, "Release", "include"))
+        self.copy(pattern="LICENSE", dst="licenses", src=self._source_subfolder)
+        cmake = self._configure_cmake()
+        cmake.install()
+
+        self.copy("license.txt", dst="license", src=self._source_subfolder)
+        self.copy(pattern="*", dst="include", src=path.join(self._source_subfolder, "Release", "include"))
         self.copy(pattern="*.dll", dst="bin", src="bin", keep_path=False)
         self.copy(pattern="*.lib", dst="lib", src="lib", keep_path=False)
         self.copy(pattern="*.a", dst="lib", src="lib", keep_path=False)
