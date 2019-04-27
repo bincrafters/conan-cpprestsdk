@@ -4,10 +4,6 @@ project(cmake_wrapper)
 include(conanbuildinfo.cmake)
 conan_basic_setup()
 
-if(CMAKE_COMPILER_IS_GNUCC)
-	add_compile_options(-Wno-conversion)
-endif()
-
 set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR};${CMAKE_MODULE_PATH}")
 
 # Find Boost and zlib
