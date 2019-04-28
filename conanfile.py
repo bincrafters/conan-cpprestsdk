@@ -14,7 +14,7 @@ def find_sysroot(sdk):
 
 class CppRestSDKConan(ConanFile):
     name = "cpprestsdk"
-    version = "2.10.12"
+    version = "2.10.13"
     description = "A project for cloud-based client-server communication in native code using a modern asynchronous " \
                   "C++ API design"
     topics = ("conan", "cpprestsdk", "rest", "client", "http")
@@ -68,7 +68,7 @@ class CppRestSDKConan(ConanFile):
         self.requires.add("cmake_findboost_modular/1.69.0@bincrafters/stable")
 
     def source(self):
-        sha256 = "c7c2a5deb4cad036b974e9b7f2ba2e3ae829312894ddfca2fae3a11980fef63e"
+        sha256 = "7578881a23edf028943f81546614fc1ba4c2e22d348b4f49ab689e1d91a63cd5"
         tools.get("{0}/archive/v{1}.tar.gz".format(self.homepage, self.version), sha256=sha256)
         extracted_dir = self.name + "-" + self.version
 
