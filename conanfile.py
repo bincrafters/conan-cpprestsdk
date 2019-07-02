@@ -55,7 +55,7 @@ class CppRestSDKConan(ConanFile):
         if not self.options.exclude_compression:
             self.requires.add("zlib/1.2.11@conan/stable")
         if not self.options.exclude_websockets:
-            self.requires.add("websocketpp/0.7.0@bincrafters/stable")
+            self.requires.add("websocketpp/0.8.1@bincrafters/stable")
         self.requires.add("boost/1.69.0@conan/stable")
 
     def source(self):
