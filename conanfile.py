@@ -84,13 +84,6 @@ class CppRestSDKConan(ConanFile):
                                   'm_timer.expires_from_now(m_duration)',
                                   'm_timer.expires_from_now(std::chrono::microseconds(m_duration.count()))')
 
-    def build(self):
-        if self.settings.compiler == 'Visual Studio':
-            with tools.vcvars(self.settings, force=True, filter_known_paths=False):
-                self._build_cmake()
-        else:
-            self._build_cmake()
-
     def _configure_cmake(self):
         if self.settings.os == "iOS":
             with open('toolchain.cmake', 'w') as toolchain_cmake:
@@ -129,7 +122,7 @@ class CppRestSDKConan(ConanFile):
         cmake.configure(build_folder=self._build_subfolder)
         return cmake
 
-    def _build_cmake(self):
+    def build(self):
         cmake = self._configure_cmake()
         cmake.build()
 
