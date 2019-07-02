@@ -56,16 +56,7 @@ class CppRestSDKConan(ConanFile):
             self.requires.add("zlib/1.2.11@conan/stable")
         if not self.options.exclude_websockets:
             self.requires.add("websocketpp/0.7.0@bincrafters/stable")
-        self.requires.add("boost_random/1.69.0@bincrafters/stable")
-        self.requires.add("boost_system/1.69.0@bincrafters/stable")
-        self.requires.add("boost_thread/1.69.0@bincrafters/stable")
-        self.requires.add("boost_filesystem/1.69.0@bincrafters/stable")
-        self.requires.add("boost_chrono/1.69.0@bincrafters/stable")
-        self.requires.add("boost_atomic/1.69.0@bincrafters/stable")
-        self.requires.add("boost_asio/1.69.0@bincrafters/stable")
-        self.requires.add("boost_date_time/1.69.0@bincrafters/stable")
-        self.requires.add("boost_regex/1.69.0@bincrafters/stable")
-        self.requires.add("cmake_findboost_modular/1.69.0@bincrafters/stable")
+        self.requires.add("boost/1.69.0@conan/stable")
 
     def source(self):
         sha256 = "7578881a23edf028943f81546614fc1ba4c2e22d348b4f49ab689e1d91a63cd5"
