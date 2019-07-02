@@ -56,19 +56,6 @@ class CppRestSDKConan(ConanFile):
 
         os.rename(extracted_dir, self._source_subfolder)
 
-        if self.settings.compiler == 'clang' and str(self.settings.compiler.libcxx) in ['libstdc++', 'libstdc++11']:
-            tools.replace_in_file(os.path.join(self._source_subfolder, 'Release', 'CMakeLists.txt'),
-                                  'libc++', 'libstdc++')
-        if self.settings.os == 'Android':
-            tools.replace_in_file(os.path.join(self._source_subfolder, 'Release', 'src', 'pch', 'stdafx.h'),
-                                  '#include "boost/config/stdlib/libstdcpp3.hpp"',
-                                  '//#include "boost/config/stdlib/libstdcpp3.hpp"')
-            # https://github.com/Microsoft/cpprestsdk/issues/372#issuecomment-386798723
-            tools.replace_in_file(os.path.join(self._source_subfolder, 'Release', 'src', 'http', 'client',
-                                            'http_client_asio.cpp'),
-                                  'm_timer.expires_from_now(m_duration)',
-                                  'm_timer.expires_from_now(std::chrono::microseconds(m_duration.count()))')
-
     def _configure_cmake(self):
         if self.settings.os == "iOS":
             with open('toolchain.cmake', 'w') as toolchain_cmake:
@@ -107,7 +94,22 @@ class CppRestSDKConan(ConanFile):
         cmake.configure(build_folder=self._build_subfolder)
         return cmake
 
+    def _patch(self):
+        if self.settings.compiler == 'clang' and str(self.settings.compiler.libcxx) in ['libstdc++', 'libstdc++11']:
+            tools.replace_in_file(os.path.join(self._source_subfolder, 'Release', 'CMakeLists.txt'),
+                                  'libc++', 'libstdc++')
+        if self.settings.os == 'Android':
+            tools.replace_in_file(os.path.join(self._source_subfolder, 'Release', 'src', 'pch', 'stdafx.h'),
+                                  '#include "boost/config/stdlib/libstdcpp3.hpp"',
+                                  '//#include "boost/config/stdlib/libstdcpp3.hpp"')
+            # https://github.com/Microsoft/cpprestsdk/issues/372#issuecomment-386798723
+            tools.replace_in_file(os.path.join(self._source_subfolder, 'Release', 'src', 'http', 'client',
+                                            'http_client_asio.cpp'),
+                                  'm_timer.expires_from_now(m_duration)',
+                                  'm_timer.expires_from_now(std::chrono::microseconds(m_duration.count()))')
+
     def build(self):
+        self._patch()
         cmake = self._configure_cmake()
         cmake.build()
 
