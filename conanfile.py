@@ -95,6 +95,7 @@ class CppRestSDKConan(ConanFile):
         return cmake
 
     def _patch(self):
+        tools.replace_in_file(os.path.join(self._source_subfolder, 'Release', 'CMakeLists.txt'), "-Wconversion", "")
         if self.settings.compiler == 'clang' and str(self.settings.compiler.libcxx) in ['libstdc++', 'libstdc++11']:
             tools.replace_in_file(os.path.join(self._source_subfolder, 'Release', 'CMakeLists.txt'),
                                   'libc++', 'libstdc++')
