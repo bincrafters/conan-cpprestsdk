@@ -1,6 +1,6 @@
 from __future__ import print_function
 from conans import ConanFile, CMake, tools
-from os import path, getcwd, environ, rename
+import os
 
 
 class CppRestSDKConan(ConanFile):
@@ -54,17 +54,17 @@ class CppRestSDKConan(ConanFile):
         tools.get("{0}/archive/v{1}.tar.gz".format(self.homepage, self.version), sha256=sha256)
         extracted_dir = self.name + "-" + self.version
 
-        rename(extracted_dir, self._source_subfolder)
+        os.rename(extracted_dir, self._source_subfolder)
 
         if self.settings.compiler == 'clang' and str(self.settings.compiler.libcxx) in ['libstdc++', 'libstdc++11']:
-            tools.replace_in_file(path.join(self._source_subfolder, 'Release', 'CMakeLists.txt'),
+            tools.replace_in_file(os.path.join(self._source_subfolder, 'Release', 'CMakeLists.txt'),
                                   'libc++', 'libstdc++')
         if self.settings.os == 'Android':
-            tools.replace_in_file(path.join(self._source_subfolder, 'Release', 'src', 'pch', 'stdafx.h'),
+            tools.replace_in_file(os.path.join(self._source_subfolder, 'Release', 'src', 'pch', 'stdafx.h'),
                                   '#include "boost/config/stdlib/libstdcpp3.hpp"',
                                   '//#include "boost/config/stdlib/libstdcpp3.hpp"')
             # https://github.com/Microsoft/cpprestsdk/issues/372#issuecomment-386798723
-            tools.replace_in_file(path.join(self._source_subfolder, 'Release', 'src', 'http', 'client',
+            tools.replace_in_file(os.path.join(self._source_subfolder, 'Release', 'src', 'http', 'client',
                                             'http_client_asio.cpp'),
                                   'm_timer.expires_from_now(m_duration)',
                                   'm_timer.expires_from_now(std::chrono::microseconds(m_duration.count()))')
@@ -86,7 +86,7 @@ class CppRestSDKConan(ConanFile):
                 toolchain_cmake.write('set(CMAKE_XCODE_EFFECTIVE_PLATFORMS "-%s" CACHE STRING "" FORCE)\n' % sdk)
                 toolchain_cmake.write('set(CMAKE_OSX_ARCHITECTURES "%s" CACHE STRING "" FORCE)\n' % arch)
                 toolchain_cmake.write('set(CMAKE_OSX_SYSROOT "%s" CACHE STRING "" FORCE)\n' % sysroot)
-            environ['CONAN_CMAKE_TOOLCHAIN_FILE'] = path.join(getcwd(), 'toolchain.cmake')
+            os.environ['CONAN_CMAKE_TOOLCHAIN_FILE'] = os.path.join(os.getcwd(), 'toolchain.cmake')
 
         cmake = CMake(self)
         cmake.definitions["BUILD_TESTS"] = False
@@ -117,7 +117,7 @@ class CppRestSDKConan(ConanFile):
         cmake.install()
 
         self.copy("license.txt", dst="license", src=self._source_subfolder)
-        self.copy(pattern="*", dst="include", src=path.join(self._source_subfolder, "Release", "include"))
+        self.copy(pattern="*", dst="include", src=os.path.join(self._source_subfolder, "Release", "include"))
         self.copy(pattern="*.dll", dst="bin", src="bin", keep_path=False)
         self.copy(pattern="*.lib", dst="lib", src="lib", keep_path=False)
         self.copy(pattern="*.a", dst="lib", src="lib", keep_path=False)
@@ -133,7 +133,7 @@ class CppRestSDKConan(ConanFile):
             version_tokens = self.version.split(".")
             versioned_name = "cpprest%s_%s_%s%s" % (toolset, version_tokens[0], version_tokens[1], debug_suffix)
             # CppRestSDK uses different library name depends on CMAKE_VS_PLATFORM_TOOLSET
-            if not path.isfile(path.join(self.package_folder, 'lib', '%s.lib' % versioned_name)):
+            if not path.isfile(os.path.join(self.package_folder, 'lib', '%s.lib' % versioned_name)):
                 versioned_name = "cpprest_%s_%s%s" % (version_tokens[0], version_tokens[1], debug_suffix)
             lib_name = versioned_name
         else:
