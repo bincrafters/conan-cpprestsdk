@@ -133,7 +133,7 @@ class CppRestSDKConan(ConanFile):
             version_tokens = self.version.split(".")
             versioned_name = "cpprest%s_%s_%s%s" % (toolset, version_tokens[0], version_tokens[1], debug_suffix)
             # CppRestSDK uses different library name depends on CMAKE_VS_PLATFORM_TOOLSET
-            if not path.isfile(os.path.join(self.package_folder, 'lib', '%s.lib' % versioned_name)):
+            if not os.path.isfile(os.path.join(self.package_folder, 'lib', '%s.lib' % versioned_name)):
                 versioned_name = "cpprest_%s_%s%s" % (version_tokens[0], version_tokens[1], debug_suffix)
             lib_name = versioned_name
         else:
