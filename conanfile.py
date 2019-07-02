@@ -1,15 +1,6 @@
 from __future__ import print_function
 from conans import ConanFile, CMake, tools
 from os import path, getcwd, environ, rename
-import subprocess
-
-
-def call(command):
-    return subprocess.check_output(command, shell=False).strip()
-
-
-def find_sysroot(sdk):
-    return call(["xcrun", "--show-sdk-path", "-sdk", sdk])
 
 
 class CppRestSDKConan(ConanFile):
@@ -87,7 +78,7 @@ class CppRestSDKConan(ConanFile):
                 elif self.settings.arch == "x86_64":
                     arch = "x86_64"
                     sdk = "iphonesimulator"
-                sysroot = find_sysroot(sdk)
+                sysroot = tools.XCRun(self.settings).sdk_path
                 toolchain_cmake.write('set(CMAKE_C_COMPILER /usr/bin/clang CACHE STRING "" FORCE)\n')
                 toolchain_cmake.write('set(CMAKE_CXX_COMPILER /usr/bin/clang++ CACHE STRING "" FORCE)\n')
                 toolchain_cmake.write('set(CMAKE_C_COMPILER_WORKS YES)\n')
