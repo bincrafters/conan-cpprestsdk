@@ -69,9 +69,12 @@ class CppRestSDKConan(ConanFile):
             tools.replace_in_file(path.join(self._source_subfolder, 'Release', 'CMakeLists.txt'),
                                   'libc++', 'libstdc++')
         if self.settings.os == 'Android':
-            tools.replace_in_file(path.join(self._source_subfolder, 'Release', 'src', 'pch', 'stdafx.h'), '#include "boost/config/stdlib/libstdcpp3.hpp"', '//#include "boost/config/stdlib/libstdcpp3.hpp"')
+            tools.replace_in_file(path.join(self._source_subfolder, 'Release', 'src', 'pch', 'stdafx.h'),
+                                  '#include "boost/config/stdlib/libstdcpp3.hpp"',
+                                  '//#include "boost/config/stdlib/libstdcpp3.hpp"')
             # https://github.com/Microsoft/cpprestsdk/issues/372#issuecomment-386798723
-            tools.replace_in_file(path.join(self._source_subfolder, 'Release', 'src', 'http', 'client', 'http_client_asio.cpp'),
+            tools.replace_in_file(path.join(self._source_subfolder, 'Release', 'src', 'http', 'client',
+                                            'http_client_asio.cpp'),
                                   'm_timer.expires_from_now(m_duration)',
                                   'm_timer.expires_from_now(std::chrono::microseconds(m_duration.count()))')
 
