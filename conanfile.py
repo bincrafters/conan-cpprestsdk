@@ -75,7 +75,7 @@ class CppRestSDKConan(ConanFile):
                 toolchain_cmake.write('set(CMAKE_OSX_SYSROOT "%s" CACHE STRING "" FORCE)\n' % sysroot)
             os.environ['CONAN_CMAKE_TOOLCHAIN_FILE'] = os.path.join(os.getcwd(), 'toolchain.cmake')
 
-        cmake = CMake(self)
+        cmake = CMake(self, set_cmake_flags=True)
         cmake.definitions["BUILD_TESTS"] = False
         cmake.definitions["BUILD_SAMPLES"] = False
         cmake.definitions["WERROR"] = False
