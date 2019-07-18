@@ -84,8 +84,18 @@ class CppRestSDKConan(ConanFile):
         cmake.definitions["CPPREST_VERSION"] = self.version
         cmake.definitions["OPENSSL_ROOT_DIR"] = self.deps_cpp_info['OpenSSL'].rootpath
         cmake.definitions["OPENSSL_USE_STATIC_LIBS"] = not self.options['OpenSSL'].shared
-        if self.settings.compiler == 'Visual Studio':
+        cmake.definitions["BOOST_ROOT"] = self.deps_cpp_info["boost"].rootpath
+        cmake.definitions["BOOST_INCLUDEDIR"] = self.deps_cpp_info["boost"].include_paths[0]
+        cmake.definitions["BOOST_LIBRARYDIR"] = self.deps_cpp_info["boost"].lib_paths[0]
+        cmake.definitions["Boost_NO_SYSTEM_PATHS"] = True
+        cmake.definitions["Boost_ADDITIONAL_VERSIONS"] = "1.69.0"
+        cmake.definitions["Boost_USE_DEBUG_LIBS"] = self.settings.build_type == "Debug"
+        cmake.definitions["Boost_USE_RELEASE_LIBS"] = self.settings.build_type != "Debug"
+        cmake.definitions["Boost_USE_STATIC_LIBS"] = not self.options["boost"].shared
+        if self.settings.get_safe("compiler.runtime"):
             cmake.definitions["OPENSSL_MSVC_STATIC_RT"] = 'MT' in str(self.settings.compiler.runtime)
+            cmake.definitions["Boost_USE_STATIC_RUNTIME"] = 'MT' in str(self.settings.compiler.runtime)
+            cmake.definitions["Boost_USE_DEBUG_RUNTIME"] = 'd' in str(self.settings.compiler.runtime)
         if self.settings.os == "iOS":
             cmake.definitions["IOS"] = True
         elif self.settings.os == "Android":
