@@ -5,7 +5,7 @@ import os
 
 class CppRestSDKConan(ConanFile):
     name = "cpprestsdk"
-    version = "2.10.13"
+    version = "2.10.14"
     description = "A project for cloud-based client-server communication in native code using a modern asynchronous " \
                   "C++ API design"
     topics = ("conan", "cpprestsdk", "rest", "client", "http")
@@ -50,7 +50,7 @@ class CppRestSDKConan(ConanFile):
         self.requires.add("boost/1.69.0@conan/stable")
 
     def source(self):
-        sha256 = "7578881a23edf028943f81546614fc1ba4c2e22d348b4f49ab689e1d91a63cd5"
+        sha256 = "f2628b248f714d7bbd6a536553bc3782602c68ca1b129017985dd70cc3515278"
         tools.get("{0}/archive/v{1}.tar.gz".format(self.homepage, self.version), sha256=sha256)
         extracted_dir = self.name + "-" + self.version
 
