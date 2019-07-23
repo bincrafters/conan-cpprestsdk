@@ -105,6 +105,29 @@ class CppRestSDKConan(ConanFile):
         return cmake
 
     def _patch(self):
+        cpprest_find_websocketpp = """
+function(cpprest_find_websocketpp)
+if(NOT TARGET cpprestsdk_websocketpp_internal)
+add_library(cpprestsdk_websocketpp_internal INTERFACE)
+target_include_directories(cpprestsdk_websocketpp_internal INTERFACE "${CONAN_INCLUDE_DIRS_WEBSOCKETPP}")
+target_link_libraries(cpprestsdk_websocketpp_internal INTERFACE "${CONAN_LIBS_WEBSOCKETPP}")
+endif()
+endfunction()
+"""
+        cpprest_find_openssl = """
+function(cpprest_find_openssl)
+if(NOT TARGET cpprestsdk_openssl_internal)
+add_library(cpprestsdk_openssl_internal INTERFACE)
+target_include_directories(cpprestsdk_openssl_internal INTERFACE "${CONAN_INCLUDE_DIRS_OPENSSL}")
+target_link_libraries(cpprestsdk_openssl_internal INTERFACE "${CONAN_LIBS_OPENSSL}")
+endif()
+endfunction()
+"""
+        tools.save(os.path.join(self._source_subfolder, "Release", "cmake", "cpprest_find_websocketpp.cmake"),
+                   cpprest_find_websocketpp)
+        tools.save(os.path.join(self._source_subfolder, "Release", "cmake", "cpprest_find_openssl.cmake"),
+                   cpprest_find_openssl)
+
         tools.replace_in_file(os.path.join(self._source_subfolder, 'Release', 'CMakeLists.txt'), "-Wconversion", "")
         if self.settings.compiler == 'clang' and str(self.settings.compiler.libcxx) in ['libstdc++', 'libstdc++11']:
             tools.replace_in_file(os.path.join(self._source_subfolder, 'Release', 'CMakeLists.txt'),
