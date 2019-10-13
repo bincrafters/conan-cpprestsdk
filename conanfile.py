@@ -42,9 +42,9 @@ class CppRestSDKConan(ConanFile):
             del self.options.fPIC
 
     def requirements(self):
-        self.requires.add("OpenSSL/1.1.1c@conan/stable")
+        self.requires.add("openssl/1.1.1d")
         if not self.options.exclude_compression:
-            self.requires.add("zlib/1.2.11@conan/stable")
+            self.requires.add("zlib/1.2.11")
         if not self.options.exclude_websockets:
             self.requires.add("websocketpp/0.8.1@bincrafters/stable")
         self.requires.add("boost/1.69.0@conan/stable")
@@ -82,8 +82,8 @@ class CppRestSDKConan(ConanFile):
         cmake.definitions["CPPREST_EXCLUDE_WEBSOCKETS"] = self.options.exclude_websockets
         cmake.definitions["CPPREST_EXCLUDE_COMPRESSION"] = self.options.exclude_compression
         cmake.definitions["CPPREST_VERSION"] = self.version
-        cmake.definitions["OPENSSL_ROOT_DIR"] = self.deps_cpp_info['OpenSSL'].rootpath
-        cmake.definitions["OPENSSL_USE_STATIC_LIBS"] = not self.options['OpenSSL'].shared
+        cmake.definitions["OPENSSL_ROOT_DIR"] = self.deps_cpp_info['openssl'].rootpath
+        cmake.definitions["OPENSSL_USE_STATIC_LIBS"] = not self.options['openssl'].shared
         cmake.definitions["BOOST_ROOT"] = self.deps_cpp_info["boost"].rootpath
         cmake.definitions["BOOST_INCLUDEDIR"] = self.deps_cpp_info["boost"].include_paths[0]
         cmake.definitions["BOOST_LIBRARYDIR"] = self.deps_cpp_info["boost"].lib_paths[0]
