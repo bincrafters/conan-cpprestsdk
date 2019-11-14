@@ -11,7 +11,6 @@ class CppRestSDKConan(ConanFile):
     topics = ("conan", "cpprestsdk", "rest", "client", "http")
     url = "https://github.com/bincrafters/conan-cpprestsdk"
     homepage = "https://github.com/Microsoft/cpprestsdk"
-    author = "Bincrafters <bincrafters@gmail.com>"
     license = "MIT"
     exports = ["LICENSE.md"]
     exports_sources = ["CMakeLists.txt"]
