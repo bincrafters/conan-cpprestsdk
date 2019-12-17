@@ -164,7 +164,8 @@ endfunction()
             debug_suffix = 'd' if self.settings.build_type == 'Debug' else ''
             toolset = {'12': '120',
                        '14': '140',
-                       '15': '141'}.get(str(self.settings.compiler.version))
+                       '15': '141',
+                       '16': '142'}.get(str(self.settings.compiler.version))
             version_tokens = self.version.split(".")
             versioned_name = "cpprest%s_%s_%s%s" % (toolset, version_tokens[0], version_tokens[1], debug_suffix)
             # CppRestSDK uses different library name depends on CMAKE_VS_PLATFORM_TOOLSET
