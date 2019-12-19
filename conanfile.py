@@ -11,11 +11,10 @@ class CppRestSDKConan(ConanFile):
     topics = ("conan", "cpprestsdk", "rest", "client", "http")
     url = "https://github.com/bincrafters/conan-cpprestsdk"
     homepage = "https://github.com/Microsoft/cpprestsdk"
-    author = "Bincrafters <bincrafters@gmail.com>"
     license = "MIT"
     exports = ["LICENSE.md"]
     exports_sources = ["CMakeLists.txt"]
-    generators = "cmake"
+    generators = "cmake", "cmake_find_package"
 
     settings = "os", "arch", "compiler", "build_type"
     options = {
@@ -42,12 +41,12 @@ class CppRestSDKConan(ConanFile):
             del self.options.fPIC
 
     def requirements(self):
-        self.requires.add("OpenSSL/1.1.1c@conan/stable")
+        self.requires.add("openssl/1.1.1d")
         if not self.options.exclude_compression:
-            self.requires.add("zlib/1.2.11@conan/stable")
+            self.requires.add("zlib/1.2.11")
         if not self.options.exclude_websockets:
             self.requires.add("websocketpp/0.8.1@bincrafters/stable")
-        self.requires.add("boost/1.69.0@conan/stable")
+        self.requires.add("boost/1.71.0")
 
     def source(self):
         sha256 = "f2628b248f714d7bbd6a536553bc3782602c68ca1b129017985dd70cc3515278"
@@ -82,8 +81,8 @@ class CppRestSDKConan(ConanFile):
         cmake.definitions["CPPREST_EXCLUDE_WEBSOCKETS"] = self.options.exclude_websockets
         cmake.definitions["CPPREST_EXCLUDE_COMPRESSION"] = self.options.exclude_compression
         cmake.definitions["CPPREST_VERSION"] = self.version
-        cmake.definitions["OPENSSL_ROOT_DIR"] = self.deps_cpp_info['OpenSSL'].rootpath
-        cmake.definitions["OPENSSL_USE_STATIC_LIBS"] = not self.options['OpenSSL'].shared
+        cmake.definitions["OPENSSL_ROOT_DIR"] = self.deps_cpp_info['openssl'].rootpath
+        cmake.definitions["OPENSSL_USE_STATIC_LIBS"] = not self.options['openssl'].shared
         cmake.definitions["BOOST_ROOT"] = self.deps_cpp_info["boost"].rootpath
         cmake.definitions["BOOST_INCLUDEDIR"] = self.deps_cpp_info["boost"].include_paths[0]
         cmake.definitions["BOOST_LIBRARYDIR"] = self.deps_cpp_info["boost"].lib_paths[0]
@@ -165,7 +164,8 @@ endfunction()
             debug_suffix = 'd' if self.settings.build_type == 'Debug' else ''
             toolset = {'12': '120',
                        '14': '140',
-                       '15': '141'}.get(str(self.settings.compiler.version))
+                       '15': '141',
+                       '16': '142'}.get(str(self.settings.compiler.version))
             version_tokens = self.version.split(".")
             versioned_name = "cpprest%s_%s_%s%s" % (toolset, version_tokens[0], version_tokens[1], debug_suffix)
             # CppRestSDK uses different library name depends on CMAKE_VS_PLATFORM_TOOLSET
