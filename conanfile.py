@@ -46,7 +46,7 @@ class CppRestSDKConan(ConanFile):
             self.requires.add("zlib/1.2.11")
         if not self.options.exclude_websockets:
             self.requires.add("websocketpp/0.8.1@bincrafters/stable")
-        self.requires.add("boost/1.71.0")
+        self.requires.add("boost/1.72.0")
 
     def source(self):
         sha256 = "f2628b248f714d7bbd6a536553bc3782602c68ca1b129017985dd70cc3515278"
