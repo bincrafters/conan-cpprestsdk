@@ -5,7 +5,7 @@ import os
 
 class CppRestSDKConan(ConanFile):
     name = "cpprestsdk"
-    version = "2.10.14"
+    version = "2.10.15"
     description = "A project for cloud-based client-server communication in native code using a modern asynchronous " \
                   "C++ API design"
     topics = ("conan", "cpprestsdk", "rest", "client", "http")
