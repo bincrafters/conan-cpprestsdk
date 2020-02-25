@@ -49,7 +49,7 @@ class CppRestSDKConan(ConanFile):
         self.requires.add("boost/1.72.0")
 
     def source(self):
-        sha256 = "f2628b248f714d7bbd6a536553bc3782602c68ca1b129017985dd70cc3515278"
+        sha256 = "1c027a53457e87b0b3a475e5c8045b94400c475898c8bd51b0fbd218b99a7f7b"
         tools.get("{0}/archive/v{1}.tar.gz".format(self.homepage, self.version), sha256=sha256)
         extracted_dir = self.name + "-" + self.version
 
