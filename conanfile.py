@@ -12,7 +12,6 @@ class CppRestSDKConan(ConanFile):
     url = "https://github.com/bincrafters/conan-cpprestsdk"
     homepage = "https://github.com/Microsoft/cpprestsdk"
     license = "MIT"
-    exports = ["LICENSE.md"]
     exports_sources = ["CMakeLists.txt"]
     generators = "cmake", "cmake_find_package"
 
@@ -41,7 +40,7 @@ class CppRestSDKConan(ConanFile):
             del self.options.fPIC
 
     def requirements(self):
-        self.requires.add("openssl/1.1.1d")
+        self.requires.add("openssl/1.1.1e")
         if not self.options.exclude_compression:
             self.requires.add("zlib/1.2.11")
         if not self.options.exclude_websockets:
